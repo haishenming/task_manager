@@ -19,14 +19,14 @@ docker-compose up -d
 
 ## 项目结构
 ```bash
-├── api                      # 接口定义          
-│   └── task           # 任务接口
+├── api                                   # 接口定义          
+│   └── task                        # 任务接口
 │       └── v1
-├── bin                      # 编译后的二进制文件
-├── cmd                      # 服务启动入口
-│   └── task_manager   # 任务管理服务
-├── configs                  # 配置文件
-├── ent                      # 数据库实体
+├── bin                                   # 编译后的二进制文件
+├── cmd                                   # 服务启动入口
+│   └── task_manager                # 任务管理服务
+├── configs                               # 配置文件
+├── ent                                   # 数据库实体
 │   ├── employee
 │   ├── enttest
 │   ├── hook
@@ -36,15 +36,15 @@ docker-compose up -d
 │   ├── runtime
 │   ├── schema
 │   └── task
-├── internal                 # 业务逻辑代码
-│   ├── biz            # 业务逻辑
-│   ├── conf           # 配置结构
-│   ├── data           # 数据访问层
-│   ├── server         # 服务启动
-│   └── service        # 服务实现
-├── task                     # swagger文档
+├── internal                              # 业务逻辑代码
+│   ├── biz                         # 业务逻辑
+│   ├── conf                        # 配置结构
+│   ├── data                        # 数据访问层
+│   ├── server                      # 服务启动
+│   └── service                     # 服务实现
+├── task                                  # swagger文档
 │   └── v1
-└── third_party              # 第三方库
+└── third_party                           # 第三方库
     ├── errors
     ├── google
     │   ├── api

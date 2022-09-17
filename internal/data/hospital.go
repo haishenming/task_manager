@@ -20,6 +20,7 @@ func NewHospitalRepo(data *Data, logger log.Logger) biz.HospitalRepo {
 	}
 }
 
+// Save 保存医院
 func (h hospitalRepo) Save(ctx context.Context, hospital *biz.Hospital) (*biz.Hospital, error) {
 	hos, err := h.data.Client().Hospital.Create().
 		SetName(hospital.Name).
@@ -36,11 +37,13 @@ func (h hospitalRepo) Save(ctx context.Context, hospital *biz.Hospital) (*biz.Ho
 	return hospital, nil
 }
 
+// Update 更新医院
 func (h hospitalRepo) Update(ctx context.Context, hospital *biz.Hospital) (*biz.Hospital, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
+// FindByID 根据ID查找医院
 func (h hospitalRepo) FindByID(ctx context.Context, i int) (*biz.Hospital, error) {
 	// 通过ID查找
 	hos, err := h.data.Client().Hospital.Get(ctx, i)
@@ -57,11 +60,7 @@ func (h hospitalRepo) FindByID(ctx context.Context, i int) (*biz.Hospital, error
 	}, nil
 }
 
-func (h hospitalRepo) ListByHello(ctx context.Context, s string) ([]*biz.Hospital, error) {
-	// TODO implement me
-	panic("implement me")
-}
-
+// ListAll 列出所有医院
 func (h hospitalRepo) ListAll(ctx context.Context) ([]*biz.Hospital, error) {
 	// TODO implement me
 	panic("implement me")

@@ -22,6 +22,7 @@ func NewTaskRepo(data *Data, logger log.Logger) biz.TaskRepo {
 	}
 }
 
+// Save 保存任务
 func (r *taskRepo) Save(ctx context.Context, g *biz.Task) (*biz.Task, error) {
 	t, err := r.data.Client().Task.Create().
 		SetTitle(g.Title).
@@ -40,6 +41,7 @@ func (r *taskRepo) Save(ctx context.Context, g *biz.Task) (*biz.Task, error) {
 	return g, nil
 }
 
+// Update 更新任务
 func (r *taskRepo) Update(ctx context.Context, g *biz.Task) (*biz.Task, error) {
 	t, err := r.data.Client().Task.UpdateOneID(g.ID).SetTitle(g.Title).
 		SetDescription(g.Description).
@@ -63,6 +65,7 @@ func (r *taskRepo) Update(ctx context.Context, g *biz.Task) (*biz.Task, error) {
 	return g, nil
 }
 
+// FindByID 通过ID查找任务
 func (r *taskRepo) FindByID(ctx context.Context, i int) (*biz.Task, error) {
 	// 通过ID查找
 	tas, err := r.data.Client().Task.Get(ctx, i)

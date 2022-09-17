@@ -20,6 +20,7 @@ func NewEmployeeRepo(data *Data, logger log.Logger) biz.EmployeeRepo {
 	}
 }
 
+// Save 保存医院
 func (e employeeRepo) Save(ctx context.Context, employee *biz.Employee) (*biz.Employee, error) {
 	emp, err := e.data.Client().Employee.Create().SetName(employee.Name).SetHospitalID(employee.HospitalID).Save(ctx)
 	if err != nil {
@@ -33,11 +34,13 @@ func (e employeeRepo) Save(ctx context.Context, employee *biz.Employee) (*biz.Em
 	return employee, nil
 }
 
+// Update 更新医院
 func (e employeeRepo) Update(ctx context.Context, employee *biz.Employee) (*biz.Employee, error) {
 	// TODO implement me
 	panic("implement me")
 }
 
+// FindByID 根据ID查找医院
 func (e employeeRepo) FindByID(ctx context.Context, i int) (*biz.Employee, error) {
 	// 通过ID查找
 	emp, err := e.data.Client().Employee.Get(ctx, i)
@@ -54,6 +57,7 @@ func (e employeeRepo) FindByID(ctx context.Context, i int) (*biz.Employee, error
 	}, nil
 }
 
+// ListAll 列出所有医院
 func (e employeeRepo) ListAll(ctx context.Context) ([]*biz.Employee, error) {
 	// TODO implement me
 	panic("implement me")
