@@ -8,6 +8,9 @@ option java_package = "task.v1";
 option objc_class_prefix = "TaskProtoV1";
 
 enum ErrorReason {
-  GREETER_UNSPECIFIED = 0;
-  USER_NOT_FOUND = 1;
+  TASK_UNSPECIFIED = 0;
+  HOSPITAL_NOT_FOUND = 1;
+  TASK_NOT_FOUND = 2;
+  EMPLOYEE_NOT_FOUND = 3;
+
 }

@@ -4,8 +4,10 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"task_manager/ent/employee"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -16,6 +18,54 @@ type EmployeeCreate struct {
 	config
 	mutation *EmployeeMutation
 	hooks    []Hook
+}
+
+// SetName sets the "name" field.
+func (ec *EmployeeCreate) SetName(s string) *EmployeeCreate {
+	ec.mutation.SetName(s)
+	return ec
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (ec *EmployeeCreate) SetNillableName(s *string) *EmployeeCreate {
+	if s != nil {
+		ec.SetName(*s)
+	}
+	return ec
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (ec *EmployeeCreate) SetHospitalID(i int) *EmployeeCreate {
+	ec.mutation.SetHospitalID(i)
+	return ec
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (ec *EmployeeCreate) SetCreatedAt(t time.Time) *EmployeeCreate {
+	ec.mutation.SetCreatedAt(t)
+	return ec
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (ec *EmployeeCreate) SetNillableCreatedAt(t *time.Time) *EmployeeCreate {
+	if t != nil {
+		ec.SetCreatedAt(*t)
+	}
+	return ec
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ec *EmployeeCreate) SetUpdatedAt(t time.Time) *EmployeeCreate {
+	ec.mutation.SetUpdatedAt(t)
+	return ec
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (ec *EmployeeCreate) SetNillableUpdatedAt(t *time.Time) *EmployeeCreate {
+	if t != nil {
+		ec.SetUpdatedAt(*t)
+	}
+	return ec
 }
 
 // Mutation returns the EmployeeMutation object of the builder.
@@ -29,6 +79,7 @@ func (ec *EmployeeCreate) Save(ctx context.Context) (*Employee, error) {
 		err  error
 		node *Employee
 	)
+	ec.defaults()
 	if len(ec.hooks) == 0 {
 		if err = ec.check(); err != nil {
 			return nil, err
@@ -92,8 +143,41 @@ func (ec *EmployeeCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ec *EmployeeCreate) defaults() {
+	if _, ok := ec.mutation.Name(); !ok {
+		v := employee.DefaultName
+		ec.mutation.SetName(v)
+	}
+	if _, ok := ec.mutation.CreatedAt(); !ok {
+		v := employee.DefaultCreatedAt
+		ec.mutation.SetCreatedAt(v)
+	}
+	if _, ok := ec.mutation.UpdatedAt(); !ok {
+		v := employee.DefaultUpdatedAt
+		ec.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (ec *EmployeeCreate) check() error {
+	if _, ok := ec.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Employee.name"`)}
+	}
+	if v, ok := ec.mutation.Name(); ok {
+		if err := employee.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Employee.name": %w`, err)}
+		}
+	}
+	if _, ok := ec.mutation.HospitalID(); !ok {
+		return &ValidationError{Name: "hospital_id", err: errors.New(`ent: missing required field "Employee.hospital_id"`)}
+	}
+	if _, ok := ec.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Employee.created_at"`)}
+	}
+	if _, ok := ec.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Employee.updated_at"`)}
+	}
 	return nil
 }
 
@@ -121,6 +205,38 @@ func (ec *EmployeeCreate) createSpec() (*Employee, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := ec.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: employee.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := ec.mutation.HospitalID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: employee.FieldHospitalID,
+		})
+		_node.HospitalID = value
+	}
+	if value, ok := ec.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := ec.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +254,7 @@ func (ecb *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
 	for i := range ecb.builders {
 		func(i int, root context.Context) {
 			builder := ecb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EmployeeMutation)
 				if !ok {

@@ -11,6 +11,10 @@ var (
 	// EmployeesColumns holds the columns for the "employees" table.
 	EmployeesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Default: ""},
+		{Name: "hospital_id", Type: field.TypeInt},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// EmployeesTable holds the schema information for the "employees" table.
 	EmployeesTable = &schema.Table{
@@ -21,6 +25,10 @@ var (
 	// HospitalsColumns holds the columns for the "hospitals" table.
 	HospitalsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Default: ""},
+		{Name: "address", Type: field.TypeString, Default: ""},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// HospitalsTable holds the schema information for the "hospitals" table.
 	HospitalsTable = &schema.Table{
@@ -31,6 +39,14 @@ var (
 	// TasksColumns holds the columns for the "tasks" table.
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "title", Type: field.TypeString, Default: ""},
+		{Name: "description", Type: field.TypeString, Default: ""},
+		{Name: "employee_id", Type: field.TypeInt, Default: 0},
+		{Name: "hospital_id", Type: field.TypeInt, Default: 0},
+		{Name: "status", Type: field.TypeInt8, Default: 0},
+		{Name: "priority", Type: field.TypeInt8, Default: 0},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
 	TasksTable = &schema.Table{

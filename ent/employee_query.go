@@ -249,6 +249,18 @@ func (eq *EmployeeQuery) Clone() *EmployeeQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Employee.Query().
+//		GroupBy(employee.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (eq *EmployeeQuery) GroupBy(field string, fields ...string) *EmployeeGroupBy {
 	grbuild := &EmployeeGroupBy{config: eq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (eq *EmployeeQuery) GroupBy(field string, fields ...string) *EmployeeGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Employee.Query().
+//		Select(employee.FieldName).
+//		Scan(ctx, &v)
 func (eq *EmployeeQuery) Select(fields ...string) *EmployeeSelect {
 	eq.fields = append(eq.fields, fields...)
 	selbuild := &EmployeeSelect{EmployeeQuery: eq}

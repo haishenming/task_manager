@@ -2,11 +2,23 @@
 
 package employee
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the employee type in the database.
 	Label = "employee"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldHospitalID holds the string denoting the hospital_id field in the database.
+	FieldHospitalID = "hospital_id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// Table holds the table name of the employee in the database.
 	Table = "employees"
 )
@@ -14,6 +26,10 @@ const (
 // Columns holds all SQL columns for employee fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldHospitalID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +41,14 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultName holds the default value on creation for the "name" field.
+	DefaultName string
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt time.Time
+)

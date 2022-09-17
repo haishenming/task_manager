@@ -29,7 +29,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 		return nil, nil, err
 	}
 	taskRepo := data.NewTaskRepo(dataData, logger)
-	taskUsecase := biz.NewTaskUsecase(taskRepo, logger)
+	employeeRepo := data.NewEmployeeRepo(dataData, logger)
+	hospitalRepo := data.NewHospitalRepo(dataData, logger)
+	taskUsecase := biz.NewTaskUsecase(taskRepo, employeeRepo, hospitalRepo, logger)
 	taskService := service.NewTaskService(taskUsecase)
 	grpcServer := server.NewGRPCServer(confServer, taskService, logger)
 	httpServer := server.NewHTTPServer(confServer, taskService, logger)

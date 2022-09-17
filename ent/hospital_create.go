@@ -4,8 +4,10 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"task_manager/ent/hospital"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -16,6 +18,62 @@ type HospitalCreate struct {
 	config
 	mutation *HospitalMutation
 	hooks    []Hook
+}
+
+// SetName sets the "name" field.
+func (hc *HospitalCreate) SetName(s string) *HospitalCreate {
+	hc.mutation.SetName(s)
+	return hc
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (hc *HospitalCreate) SetNillableName(s *string) *HospitalCreate {
+	if s != nil {
+		hc.SetName(*s)
+	}
+	return hc
+}
+
+// SetAddress sets the "address" field.
+func (hc *HospitalCreate) SetAddress(s string) *HospitalCreate {
+	hc.mutation.SetAddress(s)
+	return hc
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (hc *HospitalCreate) SetNillableAddress(s *string) *HospitalCreate {
+	if s != nil {
+		hc.SetAddress(*s)
+	}
+	return hc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (hc *HospitalCreate) SetCreatedAt(t time.Time) *HospitalCreate {
+	hc.mutation.SetCreatedAt(t)
+	return hc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (hc *HospitalCreate) SetNillableCreatedAt(t *time.Time) *HospitalCreate {
+	if t != nil {
+		hc.SetCreatedAt(*t)
+	}
+	return hc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hc *HospitalCreate) SetUpdatedAt(t time.Time) *HospitalCreate {
+	hc.mutation.SetUpdatedAt(t)
+	return hc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (hc *HospitalCreate) SetNillableUpdatedAt(t *time.Time) *HospitalCreate {
+	if t != nil {
+		hc.SetUpdatedAt(*t)
+	}
+	return hc
 }
 
 // Mutation returns the HospitalMutation object of the builder.
@@ -29,6 +87,7 @@ func (hc *HospitalCreate) Save(ctx context.Context) (*Hospital, error) {
 		err  error
 		node *Hospital
 	)
+	hc.defaults()
 	if len(hc.hooks) == 0 {
 		if err = hc.check(); err != nil {
 			return nil, err
@@ -92,8 +151,50 @@ func (hc *HospitalCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (hc *HospitalCreate) defaults() {
+	if _, ok := hc.mutation.Name(); !ok {
+		v := hospital.DefaultName
+		hc.mutation.SetName(v)
+	}
+	if _, ok := hc.mutation.Address(); !ok {
+		v := hospital.DefaultAddress
+		hc.mutation.SetAddress(v)
+	}
+	if _, ok := hc.mutation.CreatedAt(); !ok {
+		v := hospital.DefaultCreatedAt
+		hc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := hc.mutation.UpdatedAt(); !ok {
+		v := hospital.DefaultUpdatedAt
+		hc.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (hc *HospitalCreate) check() error {
+	if _, ok := hc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Hospital.name"`)}
+	}
+	if v, ok := hc.mutation.Name(); ok {
+		if err := hospital.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Hospital.name": %w`, err)}
+		}
+	}
+	if _, ok := hc.mutation.Address(); !ok {
+		return &ValidationError{Name: "address", err: errors.New(`ent: missing required field "Hospital.address"`)}
+	}
+	if v, ok := hc.mutation.Address(); ok {
+		if err := hospital.AddressValidator(v); err != nil {
+			return &ValidationError{Name: "address", err: fmt.Errorf(`ent: validator failed for field "Hospital.address": %w`, err)}
+		}
+	}
+	if _, ok := hc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Hospital.created_at"`)}
+	}
+	if _, ok := hc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Hospital.updated_at"`)}
+	}
 	return nil
 }
 
@@ -121,6 +222,38 @@ func (hc *HospitalCreate) createSpec() (*Hospital, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := hc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldName,
+		})
+		_node.Name = value
+	}
+	if value, ok := hc.mutation.Address(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldAddress,
+		})
+		_node.Address = value
+	}
+	if value, ok := hc.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := hc.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +271,7 @@ func (hcb *HospitalCreateBulk) Save(ctx context.Context) ([]*Hospital, error) {
 	for i := range hcb.builders {
 		func(i int, root context.Context) {
 			builder := hcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HospitalMutation)
 				if !ok {

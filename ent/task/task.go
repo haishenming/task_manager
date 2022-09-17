@@ -2,11 +2,31 @@
 
 package task
 
+import (
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the task type in the database.
 	Label = "task"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldEmployeeID holds the string denoting the employee_id field in the database.
+	FieldEmployeeID = "employee_id"
+	// FieldHospitalID holds the string denoting the hospital_id field in the database.
+	FieldHospitalID = "hospital_id"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// Table holds the table name of the task in the database.
 	Table = "tasks"
 )
@@ -14,6 +34,14 @@ const (
 // Columns holds all SQL columns for task fields.
 var Columns = []string{
 	FieldID,
+	FieldTitle,
+	FieldDescription,
+	FieldEmployeeID,
+	FieldHospitalID,
+	FieldStatus,
+	FieldPriority,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -25,3 +53,26 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
+
+var (
+	// DefaultTitle holds the default value on creation for the "title" field.
+	DefaultTitle string
+	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	TitleValidator func(string) error
+	// DefaultDescription holds the default value on creation for the "description" field.
+	DefaultDescription string
+	// DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	DescriptionValidator func(string) error
+	// DefaultEmployeeID holds the default value on creation for the "employee_id" field.
+	DefaultEmployeeID int
+	// DefaultHospitalID holds the default value on creation for the "hospital_id" field.
+	DefaultHospitalID int
+	// DefaultStatus holds the default value on creation for the "status" field.
+	DefaultStatus int8
+	// DefaultPriority holds the default value on creation for the "priority" field.
+	DefaultPriority int8
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
+	DefaultUpdatedAt time.Time
+)

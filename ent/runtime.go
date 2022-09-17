@@ -2,8 +2,92 @@
 
 package ent
 
+import (
+	"task_manager/ent/employee"
+	"task_manager/ent/hospital"
+	"task_manager/ent/schema"
+	"task_manager/ent/task"
+	"time"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	employeeFields := schema.Employee{}.Fields()
+	_ = employeeFields
+	// employeeDescName is the schema descriptor for name field.
+	employeeDescName := employeeFields[0].Descriptor()
+	// employee.DefaultName holds the default value on creation for the name field.
+	employee.DefaultName = employeeDescName.Default.(string)
+	// employee.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	employee.NameValidator = employeeDescName.Validators[0].(func(string) error)
+	// employeeDescCreatedAt is the schema descriptor for created_at field.
+	employeeDescCreatedAt := employeeFields[2].Descriptor()
+	// employee.DefaultCreatedAt holds the default value on creation for the created_at field.
+	employee.DefaultCreatedAt = employeeDescCreatedAt.Default.(time.Time)
+	// employeeDescUpdatedAt is the schema descriptor for updated_at field.
+	employeeDescUpdatedAt := employeeFields[3].Descriptor()
+	// employee.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	employee.DefaultUpdatedAt = employeeDescUpdatedAt.Default.(time.Time)
+	hospitalFields := schema.Hospital{}.Fields()
+	_ = hospitalFields
+	// hospitalDescName is the schema descriptor for name field.
+	hospitalDescName := hospitalFields[0].Descriptor()
+	// hospital.DefaultName holds the default value on creation for the name field.
+	hospital.DefaultName = hospitalDescName.Default.(string)
+	// hospital.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	hospital.NameValidator = hospitalDescName.Validators[0].(func(string) error)
+	// hospitalDescAddress is the schema descriptor for address field.
+	hospitalDescAddress := hospitalFields[1].Descriptor()
+	// hospital.DefaultAddress holds the default value on creation for the address field.
+	hospital.DefaultAddress = hospitalDescAddress.Default.(string)
+	// hospital.AddressValidator is a validator for the "address" field. It is called by the builders before save.
+	hospital.AddressValidator = hospitalDescAddress.Validators[0].(func(string) error)
+	// hospitalDescCreatedAt is the schema descriptor for created_at field.
+	hospitalDescCreatedAt := hospitalFields[2].Descriptor()
+	// hospital.DefaultCreatedAt holds the default value on creation for the created_at field.
+	hospital.DefaultCreatedAt = hospitalDescCreatedAt.Default.(time.Time)
+	// hospitalDescUpdatedAt is the schema descriptor for updated_at field.
+	hospitalDescUpdatedAt := hospitalFields[3].Descriptor()
+	// hospital.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	hospital.DefaultUpdatedAt = hospitalDescUpdatedAt.Default.(time.Time)
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescTitle is the schema descriptor for title field.
+	taskDescTitle := taskFields[0].Descriptor()
+	// task.DefaultTitle holds the default value on creation for the title field.
+	task.DefaultTitle = taskDescTitle.Default.(string)
+	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
+	// taskDescDescription is the schema descriptor for description field.
+	taskDescDescription := taskFields[1].Descriptor()
+	// task.DefaultDescription holds the default value on creation for the description field.
+	task.DefaultDescription = taskDescDescription.Default.(string)
+	// task.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	task.DescriptionValidator = taskDescDescription.Validators[0].(func(string) error)
+	// taskDescEmployeeID is the schema descriptor for employee_id field.
+	taskDescEmployeeID := taskFields[2].Descriptor()
+	// task.DefaultEmployeeID holds the default value on creation for the employee_id field.
+	task.DefaultEmployeeID = taskDescEmployeeID.Default.(int)
+	// taskDescHospitalID is the schema descriptor for hospital_id field.
+	taskDescHospitalID := taskFields[3].Descriptor()
+	// task.DefaultHospitalID holds the default value on creation for the hospital_id field.
+	task.DefaultHospitalID = taskDescHospitalID.Default.(int)
+	// taskDescStatus is the schema descriptor for status field.
+	taskDescStatus := taskFields[4].Descriptor()
+	// task.DefaultStatus holds the default value on creation for the status field.
+	task.DefaultStatus = taskDescStatus.Default.(int8)
+	// taskDescPriority is the schema descriptor for priority field.
+	taskDescPriority := taskFields[5].Descriptor()
+	// task.DefaultPriority holds the default value on creation for the priority field.
+	task.DefaultPriority = taskDescPriority.Default.(int8)
+	// taskDescCreatedAt is the schema descriptor for created_at field.
+	taskDescCreatedAt := taskFields[6].Descriptor()
+	// task.DefaultCreatedAt holds the default value on creation for the created_at field.
+	task.DefaultCreatedAt = taskDescCreatedAt.Default.(time.Time)
+	// taskDescUpdatedAt is the schema descriptor for updated_at field.
+	taskDescUpdatedAt := taskFields[7].Descriptor()
+	// task.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	task.DefaultUpdatedAt = taskDescUpdatedAt.Default.(time.Time)
 }

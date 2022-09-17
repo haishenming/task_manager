@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"task_manager/ent/predicate"
 	"task_manager/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,146 @@ func (tu *TaskUpdate) Where(ps ...predicate.Task) *TaskUpdate {
 	return tu
 }
 
+// SetTitle sets the "title" field.
+func (tu *TaskUpdate) SetTitle(s string) *TaskUpdate {
+	tu.mutation.SetTitle(s)
+	return tu
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableTitle(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetTitle(*s)
+	}
+	return tu
+}
+
+// SetDescription sets the "description" field.
+func (tu *TaskUpdate) SetDescription(s string) *TaskUpdate {
+	tu.mutation.SetDescription(s)
+	return tu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableDescription(s *string) *TaskUpdate {
+	if s != nil {
+		tu.SetDescription(*s)
+	}
+	return tu
+}
+
+// SetEmployeeID sets the "employee_id" field.
+func (tu *TaskUpdate) SetEmployeeID(i int) *TaskUpdate {
+	tu.mutation.ResetEmployeeID()
+	tu.mutation.SetEmployeeID(i)
+	return tu
+}
+
+// SetNillableEmployeeID sets the "employee_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableEmployeeID(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetEmployeeID(*i)
+	}
+	return tu
+}
+
+// AddEmployeeID adds i to the "employee_id" field.
+func (tu *TaskUpdate) AddEmployeeID(i int) *TaskUpdate {
+	tu.mutation.AddEmployeeID(i)
+	return tu
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (tu *TaskUpdate) SetHospitalID(i int) *TaskUpdate {
+	tu.mutation.ResetHospitalID()
+	tu.mutation.SetHospitalID(i)
+	return tu
+}
+
+// SetNillableHospitalID sets the "hospital_id" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableHospitalID(i *int) *TaskUpdate {
+	if i != nil {
+		tu.SetHospitalID(*i)
+	}
+	return tu
+}
+
+// AddHospitalID adds i to the "hospital_id" field.
+func (tu *TaskUpdate) AddHospitalID(i int) *TaskUpdate {
+	tu.mutation.AddHospitalID(i)
+	return tu
+}
+
+// SetStatus sets the "status" field.
+func (tu *TaskUpdate) SetStatus(i int8) *TaskUpdate {
+	tu.mutation.ResetStatus()
+	tu.mutation.SetStatus(i)
+	return tu
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableStatus(i *int8) *TaskUpdate {
+	if i != nil {
+		tu.SetStatus(*i)
+	}
+	return tu
+}
+
+// AddStatus adds i to the "status" field.
+func (tu *TaskUpdate) AddStatus(i int8) *TaskUpdate {
+	tu.mutation.AddStatus(i)
+	return tu
+}
+
+// SetPriority sets the "priority" field.
+func (tu *TaskUpdate) SetPriority(i int8) *TaskUpdate {
+	tu.mutation.ResetPriority()
+	tu.mutation.SetPriority(i)
+	return tu
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillablePriority(i *int8) *TaskUpdate {
+	if i != nil {
+		tu.SetPriority(*i)
+	}
+	return tu
+}
+
+// AddPriority adds i to the "priority" field.
+func (tu *TaskUpdate) AddPriority(i int8) *TaskUpdate {
+	tu.mutation.AddPriority(i)
+	return tu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tu *TaskUpdate) SetCreatedAt(t time.Time) *TaskUpdate {
+	tu.mutation.SetCreatedAt(t)
+	return tu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableCreatedAt(t *time.Time) *TaskUpdate {
+	if t != nil {
+		tu.SetCreatedAt(*t)
+	}
+	return tu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tu *TaskUpdate) SetUpdatedAt(t time.Time) *TaskUpdate {
+	tu.mutation.SetUpdatedAt(t)
+	return tu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tu *TaskUpdate) SetNillableUpdatedAt(t *time.Time) *TaskUpdate {
+	if t != nil {
+		tu.SetUpdatedAt(*t)
+	}
+	return tu
+}
+
 // Mutation returns the TaskMutation object of the builder.
 func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
@@ -39,12 +180,18 @@ func (tu *TaskUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(tu.hooks) == 0 {
+		if err = tu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = tu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*TaskMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = tu.check(); err != nil {
+				return 0, err
 			}
 			tu.mutation = mutation
 			affected, err = tu.sqlSave(ctx)
@@ -86,6 +233,21 @@ func (tu *TaskUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tu *TaskUpdate) check() error {
+	if v, ok := tu.mutation.Title(); ok {
+		if err := task.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Task.title": %w`, err)}
+		}
+	}
+	if v, ok := tu.mutation.Description(); ok {
+		if err := task.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Task.description": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -104,6 +266,90 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := tu.mutation.Title(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldTitle,
+		})
+	}
+	if value, ok := tu.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldDescription,
+		})
+	}
+	if value, ok := tu.mutation.EmployeeID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldEmployeeID,
+		})
+	}
+	if value, ok := tu.mutation.AddedEmployeeID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldEmployeeID,
+		})
+	}
+	if value, ok := tu.mutation.HospitalID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldHospitalID,
+		})
+	}
+	if value, ok := tu.mutation.AddedHospitalID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldHospitalID,
+		})
+	}
+	if value, ok := tu.mutation.Status(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldStatus,
+		})
+	}
+	if value, ok := tu.mutation.AddedStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldStatus,
+		})
+	}
+	if value, ok := tu.mutation.Priority(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldPriority,
+		})
+	}
+	if value, ok := tu.mutation.AddedPriority(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldPriority,
+		})
+	}
+	if value, ok := tu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldCreatedAt,
+		})
+	}
+	if value, ok := tu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdatedAt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{task.Label}
@@ -121,6 +367,146 @@ type TaskUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *TaskMutation
+}
+
+// SetTitle sets the "title" field.
+func (tuo *TaskUpdateOne) SetTitle(s string) *TaskUpdateOne {
+	tuo.mutation.SetTitle(s)
+	return tuo
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableTitle(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetTitle(*s)
+	}
+	return tuo
+}
+
+// SetDescription sets the "description" field.
+func (tuo *TaskUpdateOne) SetDescription(s string) *TaskUpdateOne {
+	tuo.mutation.SetDescription(s)
+	return tuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableDescription(s *string) *TaskUpdateOne {
+	if s != nil {
+		tuo.SetDescription(*s)
+	}
+	return tuo
+}
+
+// SetEmployeeID sets the "employee_id" field.
+func (tuo *TaskUpdateOne) SetEmployeeID(i int) *TaskUpdateOne {
+	tuo.mutation.ResetEmployeeID()
+	tuo.mutation.SetEmployeeID(i)
+	return tuo
+}
+
+// SetNillableEmployeeID sets the "employee_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableEmployeeID(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetEmployeeID(*i)
+	}
+	return tuo
+}
+
+// AddEmployeeID adds i to the "employee_id" field.
+func (tuo *TaskUpdateOne) AddEmployeeID(i int) *TaskUpdateOne {
+	tuo.mutation.AddEmployeeID(i)
+	return tuo
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (tuo *TaskUpdateOne) SetHospitalID(i int) *TaskUpdateOne {
+	tuo.mutation.ResetHospitalID()
+	tuo.mutation.SetHospitalID(i)
+	return tuo
+}
+
+// SetNillableHospitalID sets the "hospital_id" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableHospitalID(i *int) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetHospitalID(*i)
+	}
+	return tuo
+}
+
+// AddHospitalID adds i to the "hospital_id" field.
+func (tuo *TaskUpdateOne) AddHospitalID(i int) *TaskUpdateOne {
+	tuo.mutation.AddHospitalID(i)
+	return tuo
+}
+
+// SetStatus sets the "status" field.
+func (tuo *TaskUpdateOne) SetStatus(i int8) *TaskUpdateOne {
+	tuo.mutation.ResetStatus()
+	tuo.mutation.SetStatus(i)
+	return tuo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableStatus(i *int8) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetStatus(*i)
+	}
+	return tuo
+}
+
+// AddStatus adds i to the "status" field.
+func (tuo *TaskUpdateOne) AddStatus(i int8) *TaskUpdateOne {
+	tuo.mutation.AddStatus(i)
+	return tuo
+}
+
+// SetPriority sets the "priority" field.
+func (tuo *TaskUpdateOne) SetPriority(i int8) *TaskUpdateOne {
+	tuo.mutation.ResetPriority()
+	tuo.mutation.SetPriority(i)
+	return tuo
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillablePriority(i *int8) *TaskUpdateOne {
+	if i != nil {
+		tuo.SetPriority(*i)
+	}
+	return tuo
+}
+
+// AddPriority adds i to the "priority" field.
+func (tuo *TaskUpdateOne) AddPriority(i int8) *TaskUpdateOne {
+	tuo.mutation.AddPriority(i)
+	return tuo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tuo *TaskUpdateOne) SetCreatedAt(t time.Time) *TaskUpdateOne {
+	tuo.mutation.SetCreatedAt(t)
+	return tuo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableCreatedAt(t *time.Time) *TaskUpdateOne {
+	if t != nil {
+		tuo.SetCreatedAt(*t)
+	}
+	return tuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tuo *TaskUpdateOne) SetUpdatedAt(t time.Time) *TaskUpdateOne {
+	tuo.mutation.SetUpdatedAt(t)
+	return tuo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableUpdatedAt(t *time.Time) *TaskUpdateOne {
+	if t != nil {
+		tuo.SetUpdatedAt(*t)
+	}
+	return tuo
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -142,12 +528,18 @@ func (tuo *TaskUpdateOne) Save(ctx context.Context) (*Task, error) {
 		node *Task
 	)
 	if len(tuo.hooks) == 0 {
+		if err = tuo.check(); err != nil {
+			return nil, err
+		}
 		node, err = tuo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*TaskMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = tuo.check(); err != nil {
+				return nil, err
 			}
 			tuo.mutation = mutation
 			node, err = tuo.sqlSave(ctx)
@@ -195,6 +587,21 @@ func (tuo *TaskUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tuo *TaskUpdateOne) check() error {
+	if v, ok := tuo.mutation.Title(); ok {
+		if err := task.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Task.title": %w`, err)}
+		}
+	}
+	if v, ok := tuo.mutation.Description(); ok {
+		if err := task.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Task.description": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -229,6 +636,90 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := tuo.mutation.Title(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldTitle,
+		})
+	}
+	if value, ok := tuo.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldDescription,
+		})
+	}
+	if value, ok := tuo.mutation.EmployeeID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldEmployeeID,
+		})
+	}
+	if value, ok := tuo.mutation.AddedEmployeeID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldEmployeeID,
+		})
+	}
+	if value, ok := tuo.mutation.HospitalID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldHospitalID,
+		})
+	}
+	if value, ok := tuo.mutation.AddedHospitalID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldHospitalID,
+		})
+	}
+	if value, ok := tuo.mutation.Status(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldStatus,
+		})
+	}
+	if value, ok := tuo.mutation.AddedStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldStatus,
+		})
+	}
+	if value, ok := tuo.mutation.Priority(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldPriority,
+		})
+	}
+	if value, ok := tuo.mutation.AddedPriority(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldPriority,
+		})
+	}
+	if value, ok := tuo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldCreatedAt,
+		})
+	}
+	if value, ok := tuo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdatedAt,
+		})
 	}
 	_node = &Task{config: tuo.config}
 	_spec.Assign = _node.assignValues

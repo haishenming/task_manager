@@ -44,7 +44,7 @@ func RegisterTaskHTTPServer(s *http.Server, srv TaskHTTPServer) {
 	r.POST("/task", _Task_CreateTask0_HTTP_Handler(srv))
 	r.PUT("/task", _Task_UpdateTask0_HTTP_Handler(srv))
 	r.PUT("/task/assign", _Task_AssignTask0_HTTP_Handler(srv))
-	r.GET("/task/staff/{staff_id}", _Task_GetEmployeeTasks0_HTTP_Handler(srv))
+	r.GET("/task/staff/{employee_id}", _Task_GetEmployeeTasks0_HTTP_Handler(srv))
 	r.GET("/task/hospital/{hospital_id}", _Task_GetHospitalTasks0_HTTP_Handler(srv))
 }
 
@@ -246,7 +246,7 @@ func (c *TaskHTTPClientImpl) CreateTask(ctx context.Context, in *CreateTaskReque
 
 func (c *TaskHTTPClientImpl) GetEmployeeTasks(ctx context.Context, in *GetEmployeeTasksRequest, opts ...http.CallOption) (*GetEmployeeTasksReply, error) {
 	var out GetEmployeeTasksReply
-	pattern := "/task/staff/{staff_id}"
+	pattern := "/task/staff/{employee_id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationTaskGetEmployeeTasks))
 	opts = append(opts, http.PathTemplate(pattern))

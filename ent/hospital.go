@@ -6,15 +6,24 @@ import (
 	"fmt"
 	"strings"
 	"task_manager/ent/hospital"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
 
 // Hospital is the model entity for the Hospital schema.
 type Hospital struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// 医院名称
+	Name string `json:"name,omitempty"`
+	// 医院地址
+	Address string `json:"address,omitempty"`
+	// 创建时间
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,6 +33,10 @@ func (*Hospital) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case hospital.FieldID:
 			values[i] = new(sql.NullInt64)
+		case hospital.FieldName, hospital.FieldAddress:
+			values[i] = new(sql.NullString)
+		case hospital.FieldCreatedAt, hospital.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Hospital", columns[i])
 		}
@@ -45,6 +58,30 @@ func (h *Hospital) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			h.ID = int(value.Int64)
+		case hospital.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				h.Name = value.String
+			}
+		case hospital.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				h.Address = value.String
+			}
+		case hospital.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				h.CreatedAt = value.Time
+			}
+		case hospital.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				h.UpdatedAt = value.Time
+			}
 		}
 	}
 	return nil
@@ -72,7 +109,18 @@ func (h *Hospital) Unwrap() *Hospital {
 func (h *Hospital) String() string {
 	var builder strings.Builder
 	builder.WriteString("Hospital(")
-	builder.WriteString(fmt.Sprintf("id=%v", h.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", h.ID))
+	builder.WriteString("name=")
+	builder.WriteString(h.Name)
+	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(h.Address)
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(h.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(h.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

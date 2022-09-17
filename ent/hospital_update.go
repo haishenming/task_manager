@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"task_manager/ent/hospital"
 	"task_manager/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,62 @@ func (hu *HospitalUpdate) Where(ps ...predicate.Hospital) *HospitalUpdate {
 	return hu
 }
 
+// SetName sets the "name" field.
+func (hu *HospitalUpdate) SetName(s string) *HospitalUpdate {
+	hu.mutation.SetName(s)
+	return hu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (hu *HospitalUpdate) SetNillableName(s *string) *HospitalUpdate {
+	if s != nil {
+		hu.SetName(*s)
+	}
+	return hu
+}
+
+// SetAddress sets the "address" field.
+func (hu *HospitalUpdate) SetAddress(s string) *HospitalUpdate {
+	hu.mutation.SetAddress(s)
+	return hu
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (hu *HospitalUpdate) SetNillableAddress(s *string) *HospitalUpdate {
+	if s != nil {
+		hu.SetAddress(*s)
+	}
+	return hu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (hu *HospitalUpdate) SetCreatedAt(t time.Time) *HospitalUpdate {
+	hu.mutation.SetCreatedAt(t)
+	return hu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (hu *HospitalUpdate) SetNillableCreatedAt(t *time.Time) *HospitalUpdate {
+	if t != nil {
+		hu.SetCreatedAt(*t)
+	}
+	return hu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (hu *HospitalUpdate) SetUpdatedAt(t time.Time) *HospitalUpdate {
+	hu.mutation.SetUpdatedAt(t)
+	return hu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (hu *HospitalUpdate) SetNillableUpdatedAt(t *time.Time) *HospitalUpdate {
+	if t != nil {
+		hu.SetUpdatedAt(*t)
+	}
+	return hu
+}
+
 // Mutation returns the HospitalMutation object of the builder.
 func (hu *HospitalUpdate) Mutation() *HospitalMutation {
 	return hu.mutation
@@ -39,12 +96,18 @@ func (hu *HospitalUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(hu.hooks) == 0 {
+		if err = hu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = hu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*HospitalMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = hu.check(); err != nil {
+				return 0, err
 			}
 			hu.mutation = mutation
 			affected, err = hu.sqlSave(ctx)
@@ -86,6 +149,21 @@ func (hu *HospitalUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (hu *HospitalUpdate) check() error {
+	if v, ok := hu.mutation.Name(); ok {
+		if err := hospital.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Hospital.name": %w`, err)}
+		}
+	}
+	if v, ok := hu.mutation.Address(); ok {
+		if err := hospital.AddressValidator(v); err != nil {
+			return &ValidationError{Name: "address", err: fmt.Errorf(`ent: validator failed for field "Hospital.address": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (hu *HospitalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -104,6 +182,34 @@ func (hu *HospitalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := hu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldName,
+		})
+	}
+	if value, ok := hu.mutation.Address(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldAddress,
+		})
+	}
+	if value, ok := hu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldCreatedAt,
+		})
+	}
+	if value, ok := hu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldUpdatedAt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, hu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{hospital.Label}
@@ -121,6 +227,62 @@ type HospitalUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *HospitalMutation
+}
+
+// SetName sets the "name" field.
+func (huo *HospitalUpdateOne) SetName(s string) *HospitalUpdateOne {
+	huo.mutation.SetName(s)
+	return huo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (huo *HospitalUpdateOne) SetNillableName(s *string) *HospitalUpdateOne {
+	if s != nil {
+		huo.SetName(*s)
+	}
+	return huo
+}
+
+// SetAddress sets the "address" field.
+func (huo *HospitalUpdateOne) SetAddress(s string) *HospitalUpdateOne {
+	huo.mutation.SetAddress(s)
+	return huo
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (huo *HospitalUpdateOne) SetNillableAddress(s *string) *HospitalUpdateOne {
+	if s != nil {
+		huo.SetAddress(*s)
+	}
+	return huo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (huo *HospitalUpdateOne) SetCreatedAt(t time.Time) *HospitalUpdateOne {
+	huo.mutation.SetCreatedAt(t)
+	return huo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (huo *HospitalUpdateOne) SetNillableCreatedAt(t *time.Time) *HospitalUpdateOne {
+	if t != nil {
+		huo.SetCreatedAt(*t)
+	}
+	return huo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (huo *HospitalUpdateOne) SetUpdatedAt(t time.Time) *HospitalUpdateOne {
+	huo.mutation.SetUpdatedAt(t)
+	return huo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (huo *HospitalUpdateOne) SetNillableUpdatedAt(t *time.Time) *HospitalUpdateOne {
+	if t != nil {
+		huo.SetUpdatedAt(*t)
+	}
+	return huo
 }
 
 // Mutation returns the HospitalMutation object of the builder.
@@ -142,12 +304,18 @@ func (huo *HospitalUpdateOne) Save(ctx context.Context) (*Hospital, error) {
 		node *Hospital
 	)
 	if len(huo.hooks) == 0 {
+		if err = huo.check(); err != nil {
+			return nil, err
+		}
 		node, err = huo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*HospitalMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = huo.check(); err != nil {
+				return nil, err
 			}
 			huo.mutation = mutation
 			node, err = huo.sqlSave(ctx)
@@ -195,6 +363,21 @@ func (huo *HospitalUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (huo *HospitalUpdateOne) check() error {
+	if v, ok := huo.mutation.Name(); ok {
+		if err := hospital.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Hospital.name": %w`, err)}
+		}
+	}
+	if v, ok := huo.mutation.Address(); ok {
+		if err := hospital.AddressValidator(v); err != nil {
+			return &ValidationError{Name: "address", err: fmt.Errorf(`ent: validator failed for field "Hospital.address": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (huo *HospitalUpdateOne) sqlSave(ctx context.Context) (_node *Hospital, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -229,6 +412,34 @@ func (huo *HospitalUpdateOne) sqlSave(ctx context.Context) (_node *Hospital, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := huo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldName,
+		})
+	}
+	if value, ok := huo.mutation.Address(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: hospital.FieldAddress,
+		})
+	}
+	if value, ok := huo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldCreatedAt,
+		})
+	}
+	if value, ok := huo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: hospital.FieldUpdatedAt,
+		})
 	}
 	_node = &Hospital{config: huo.config}
 	_spec.Assign = _node.assignValues

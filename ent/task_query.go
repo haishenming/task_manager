@@ -249,6 +249,18 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Title string `json:"title,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Task.Query().
+//		GroupBy(task.FieldTitle).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (tq *TaskQuery) GroupBy(field string, fields ...string) *TaskGroupBy {
 	grbuild := &TaskGroupBy{config: tq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (tq *TaskQuery) GroupBy(field string, fields ...string) *TaskGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Title string `json:"title,omitempty"`
+//	}
+//
+//	client.Task.Query().
+//		Select(task.FieldTitle).
+//		Scan(ctx, &v)
 func (tq *TaskQuery) Select(fields ...string) *TaskSelect {
 	tq.fields = append(tq.fields, fields...)
 	selbuild := &TaskSelect{TaskQuery: tq}

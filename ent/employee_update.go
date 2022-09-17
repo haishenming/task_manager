@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"task_manager/ent/employee"
 	"task_manager/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,61 @@ func (eu *EmployeeUpdate) Where(ps ...predicate.Employee) *EmployeeUpdate {
 	return eu
 }
 
+// SetName sets the "name" field.
+func (eu *EmployeeUpdate) SetName(s string) *EmployeeUpdate {
+	eu.mutation.SetName(s)
+	return eu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (eu *EmployeeUpdate) SetNillableName(s *string) *EmployeeUpdate {
+	if s != nil {
+		eu.SetName(*s)
+	}
+	return eu
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (eu *EmployeeUpdate) SetHospitalID(i int) *EmployeeUpdate {
+	eu.mutation.ResetHospitalID()
+	eu.mutation.SetHospitalID(i)
+	return eu
+}
+
+// AddHospitalID adds i to the "hospital_id" field.
+func (eu *EmployeeUpdate) AddHospitalID(i int) *EmployeeUpdate {
+	eu.mutation.AddHospitalID(i)
+	return eu
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (eu *EmployeeUpdate) SetCreatedAt(t time.Time) *EmployeeUpdate {
+	eu.mutation.SetCreatedAt(t)
+	return eu
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (eu *EmployeeUpdate) SetNillableCreatedAt(t *time.Time) *EmployeeUpdate {
+	if t != nil {
+		eu.SetCreatedAt(*t)
+	}
+	return eu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (eu *EmployeeUpdate) SetUpdatedAt(t time.Time) *EmployeeUpdate {
+	eu.mutation.SetUpdatedAt(t)
+	return eu
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (eu *EmployeeUpdate) SetNillableUpdatedAt(t *time.Time) *EmployeeUpdate {
+	if t != nil {
+		eu.SetUpdatedAt(*t)
+	}
+	return eu
+}
+
 // Mutation returns the EmployeeMutation object of the builder.
 func (eu *EmployeeUpdate) Mutation() *EmployeeMutation {
 	return eu.mutation
@@ -39,12 +95,18 @@ func (eu *EmployeeUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(eu.hooks) == 0 {
+		if err = eu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = eu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*EmployeeMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = eu.check(); err != nil {
+				return 0, err
 			}
 			eu.mutation = mutation
 			affected, err = eu.sqlSave(ctx)
@@ -86,6 +148,16 @@ func (eu *EmployeeUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (eu *EmployeeUpdate) check() error {
+	if v, ok := eu.mutation.Name(); ok {
+		if err := employee.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Employee.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (eu *EmployeeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -104,6 +176,41 @@ func (eu *EmployeeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := eu.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: employee.FieldName,
+		})
+	}
+	if value, ok := eu.mutation.HospitalID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: employee.FieldHospitalID,
+		})
+	}
+	if value, ok := eu.mutation.AddedHospitalID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: employee.FieldHospitalID,
+		})
+	}
+	if value, ok := eu.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldCreatedAt,
+		})
+	}
+	if value, ok := eu.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldUpdatedAt,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{employee.Label}
@@ -121,6 +228,61 @@ type EmployeeUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *EmployeeMutation
+}
+
+// SetName sets the "name" field.
+func (euo *EmployeeUpdateOne) SetName(s string) *EmployeeUpdateOne {
+	euo.mutation.SetName(s)
+	return euo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (euo *EmployeeUpdateOne) SetNillableName(s *string) *EmployeeUpdateOne {
+	if s != nil {
+		euo.SetName(*s)
+	}
+	return euo
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (euo *EmployeeUpdateOne) SetHospitalID(i int) *EmployeeUpdateOne {
+	euo.mutation.ResetHospitalID()
+	euo.mutation.SetHospitalID(i)
+	return euo
+}
+
+// AddHospitalID adds i to the "hospital_id" field.
+func (euo *EmployeeUpdateOne) AddHospitalID(i int) *EmployeeUpdateOne {
+	euo.mutation.AddHospitalID(i)
+	return euo
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (euo *EmployeeUpdateOne) SetCreatedAt(t time.Time) *EmployeeUpdateOne {
+	euo.mutation.SetCreatedAt(t)
+	return euo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (euo *EmployeeUpdateOne) SetNillableCreatedAt(t *time.Time) *EmployeeUpdateOne {
+	if t != nil {
+		euo.SetCreatedAt(*t)
+	}
+	return euo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (euo *EmployeeUpdateOne) SetUpdatedAt(t time.Time) *EmployeeUpdateOne {
+	euo.mutation.SetUpdatedAt(t)
+	return euo
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (euo *EmployeeUpdateOne) SetNillableUpdatedAt(t *time.Time) *EmployeeUpdateOne {
+	if t != nil {
+		euo.SetUpdatedAt(*t)
+	}
+	return euo
 }
 
 // Mutation returns the EmployeeMutation object of the builder.
@@ -142,12 +304,18 @@ func (euo *EmployeeUpdateOne) Save(ctx context.Context) (*Employee, error) {
 		node *Employee
 	)
 	if len(euo.hooks) == 0 {
+		if err = euo.check(); err != nil {
+			return nil, err
+		}
 		node, err = euo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*EmployeeMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = euo.check(); err != nil {
+				return nil, err
 			}
 			euo.mutation = mutation
 			node, err = euo.sqlSave(ctx)
@@ -195,6 +363,16 @@ func (euo *EmployeeUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (euo *EmployeeUpdateOne) check() error {
+	if v, ok := euo.mutation.Name(); ok {
+		if err := employee.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Employee.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (euo *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -229,6 +407,41 @@ func (euo *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := euo.mutation.Name(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: employee.FieldName,
+		})
+	}
+	if value, ok := euo.mutation.HospitalID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: employee.FieldHospitalID,
+		})
+	}
+	if value, ok := euo.mutation.AddedHospitalID(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: employee.FieldHospitalID,
+		})
+	}
+	if value, ok := euo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldCreatedAt,
+		})
+	}
+	if value, ok := euo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: employee.FieldUpdatedAt,
+		})
 	}
 	_node = &Employee{config: euo.config}
 	_spec.Assign = _node.assignValues

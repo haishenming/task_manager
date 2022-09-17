@@ -4,6 +4,7 @@ package employee
 
 import (
 	"task_manager/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -76,6 +77,325 @@ func IDLT(id int) predicate.Employee {
 func IDLTE(id int) predicate.Employee {
 	return predicate.Employee(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldID), id))
+	})
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldName), v))
+	})
+}
+
+// HospitalID applies equality check predicate on the "hospital_id" field. It's identical to HospitalIDEQ.
+func HospitalID(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHospitalID), v))
+	})
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldName), v))
+	})
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldName), v))
+	})
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldName), v...))
+	})
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldName), v...))
+	})
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldName), v))
+	})
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldName), v))
+	})
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldName), v))
+	})
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldName), v))
+	})
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldName), v))
+	})
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldName), v))
+	})
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldName), v))
+	})
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldName), v))
+	})
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldName), v))
+	})
+}
+
+// HospitalIDEQ applies the EQ predicate on the "hospital_id" field.
+func HospitalIDEQ(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHospitalID), v))
+	})
+}
+
+// HospitalIDNEQ applies the NEQ predicate on the "hospital_id" field.
+func HospitalIDNEQ(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldHospitalID), v))
+	})
+}
+
+// HospitalIDIn applies the In predicate on the "hospital_id" field.
+func HospitalIDIn(vs ...int) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldHospitalID), v...))
+	})
+}
+
+// HospitalIDNotIn applies the NotIn predicate on the "hospital_id" field.
+func HospitalIDNotIn(vs ...int) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldHospitalID), v...))
+	})
+}
+
+// HospitalIDGT applies the GT predicate on the "hospital_id" field.
+func HospitalIDGT(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldHospitalID), v))
+	})
+}
+
+// HospitalIDGTE applies the GTE predicate on the "hospital_id" field.
+func HospitalIDGTE(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldHospitalID), v))
+	})
+}
+
+// HospitalIDLT applies the LT predicate on the "hospital_id" field.
+func HospitalIDLT(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldHospitalID), v))
+	})
+}
+
+// HospitalIDLTE applies the LTE predicate on the "hospital_id" field.
+func HospitalIDLTE(v int) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldHospitalID), v))
+	})
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldCreatedAt), v...))
+	})
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldCreatedAt), v...))
+	})
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldCreatedAt), v))
+	})
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldCreatedAt), v))
+	})
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldUpdatedAt), v...))
+	})
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Employee {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldUpdatedAt), v...))
+	})
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldUpdatedAt), v))
+	})
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Employee {
+	return predicate.Employee(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldUpdatedAt), v))
 	})
 }
 

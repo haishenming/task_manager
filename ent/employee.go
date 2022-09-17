@@ -6,15 +6,24 @@ import (
 	"fmt"
 	"strings"
 	"task_manager/ent/employee"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
 
 // Employee is the model entity for the Employee schema.
 type Employee struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// 员工名称
+	Name string `json:"name,omitempty"`
+	// 医院id
+	HospitalID int `json:"hospital_id,omitempty"`
+	// 创建时间
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -22,8 +31,12 @@ func (*Employee) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case employee.FieldID:
+		case employee.FieldID, employee.FieldHospitalID:
 			values[i] = new(sql.NullInt64)
+		case employee.FieldName:
+			values[i] = new(sql.NullString)
+		case employee.FieldCreatedAt, employee.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Employee", columns[i])
 		}
@@ -45,6 +58,30 @@ func (e *Employee) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			e.ID = int(value.Int64)
+		case employee.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				e.Name = value.String
+			}
+		case employee.FieldHospitalID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field hospital_id", values[i])
+			} else if value.Valid {
+				e.HospitalID = int(value.Int64)
+			}
+		case employee.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				e.CreatedAt = value.Time
+			}
+		case employee.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				e.UpdatedAt = value.Time
+			}
 		}
 	}
 	return nil
@@ -72,7 +109,18 @@ func (e *Employee) Unwrap() *Employee {
 func (e *Employee) String() string {
 	var builder strings.Builder
 	builder.WriteString("Employee(")
-	builder.WriteString(fmt.Sprintf("id=%v", e.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
+	builder.WriteString("name=")
+	builder.WriteString(e.Name)
+	builder.WriteString(", ")
+	builder.WriteString("hospital_id=")
+	builder.WriteString(fmt.Sprintf("%v", e.HospitalID))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(e.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(e.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

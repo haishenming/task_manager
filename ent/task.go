@@ -6,15 +6,32 @@ import (
 	"fmt"
 	"strings"
 	"task_manager/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
 
 // Task is the model entity for the Task schema.
 type Task struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// 任务标题
+	Title string `json:"title,omitempty"`
+	// 任务描述
+	Description string `json:"description,omitempty"`
+	// 员工id
+	EmployeeID int `json:"employee_id,omitempty"`
+	// 医院id
+	HospitalID int `json:"hospital_id,omitempty"`
+	// 任务状态
+	Status int8 `json:"status,omitempty"`
+	// 任务优先级
+	Priority int8 `json:"priority,omitempty"`
+	// 创建时间
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// 更新时间
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -22,8 +39,12 @@ func (*Task) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case task.FieldID:
+		case task.FieldID, task.FieldEmployeeID, task.FieldHospitalID, task.FieldStatus, task.FieldPriority:
 			values[i] = new(sql.NullInt64)
+		case task.FieldTitle, task.FieldDescription:
+			values[i] = new(sql.NullString)
+		case task.FieldCreatedAt, task.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Task", columns[i])
 		}
@@ -45,6 +66,54 @@ func (t *Task) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			t.ID = int(value.Int64)
+		case task.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				t.Title = value.String
+			}
+		case task.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				t.Description = value.String
+			}
+		case task.FieldEmployeeID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field employee_id", values[i])
+			} else if value.Valid {
+				t.EmployeeID = int(value.Int64)
+			}
+		case task.FieldHospitalID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field hospital_id", values[i])
+			} else if value.Valid {
+				t.HospitalID = int(value.Int64)
+			}
+		case task.FieldStatus:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				t.Status = int8(value.Int64)
+			}
+		case task.FieldPriority:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				t.Priority = int8(value.Int64)
+			}
+		case task.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				t.CreatedAt = value.Time
+			}
+		case task.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				t.UpdatedAt = value.Time
+			}
 		}
 	}
 	return nil
@@ -72,7 +141,30 @@ func (t *Task) Unwrap() *Task {
 func (t *Task) String() string {
 	var builder strings.Builder
 	builder.WriteString("Task(")
-	builder.WriteString(fmt.Sprintf("id=%v", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString("title=")
+	builder.WriteString(t.Title)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(t.Description)
+	builder.WriteString(", ")
+	builder.WriteString("employee_id=")
+	builder.WriteString(fmt.Sprintf("%v", t.EmployeeID))
+	builder.WriteString(", ")
+	builder.WriteString("hospital_id=")
+	builder.WriteString(fmt.Sprintf("%v", t.HospitalID))
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", t.Status))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", t.Priority))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

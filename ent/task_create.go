@@ -4,8 +4,10 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"task_manager/ent/task"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -16,6 +18,118 @@ type TaskCreate struct {
 	config
 	mutation *TaskMutation
 	hooks    []Hook
+}
+
+// SetTitle sets the "title" field.
+func (tc *TaskCreate) SetTitle(s string) *TaskCreate {
+	tc.mutation.SetTitle(s)
+	return tc
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableTitle(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetTitle(*s)
+	}
+	return tc
+}
+
+// SetDescription sets the "description" field.
+func (tc *TaskCreate) SetDescription(s string) *TaskCreate {
+	tc.mutation.SetDescription(s)
+	return tc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableDescription(s *string) *TaskCreate {
+	if s != nil {
+		tc.SetDescription(*s)
+	}
+	return tc
+}
+
+// SetEmployeeID sets the "employee_id" field.
+func (tc *TaskCreate) SetEmployeeID(i int) *TaskCreate {
+	tc.mutation.SetEmployeeID(i)
+	return tc
+}
+
+// SetNillableEmployeeID sets the "employee_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableEmployeeID(i *int) *TaskCreate {
+	if i != nil {
+		tc.SetEmployeeID(*i)
+	}
+	return tc
+}
+
+// SetHospitalID sets the "hospital_id" field.
+func (tc *TaskCreate) SetHospitalID(i int) *TaskCreate {
+	tc.mutation.SetHospitalID(i)
+	return tc
+}
+
+// SetNillableHospitalID sets the "hospital_id" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableHospitalID(i *int) *TaskCreate {
+	if i != nil {
+		tc.SetHospitalID(*i)
+	}
+	return tc
+}
+
+// SetStatus sets the "status" field.
+func (tc *TaskCreate) SetStatus(i int8) *TaskCreate {
+	tc.mutation.SetStatus(i)
+	return tc
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableStatus(i *int8) *TaskCreate {
+	if i != nil {
+		tc.SetStatus(*i)
+	}
+	return tc
+}
+
+// SetPriority sets the "priority" field.
+func (tc *TaskCreate) SetPriority(i int8) *TaskCreate {
+	tc.mutation.SetPriority(i)
+	return tc
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (tc *TaskCreate) SetNillablePriority(i *int8) *TaskCreate {
+	if i != nil {
+		tc.SetPriority(*i)
+	}
+	return tc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (tc *TaskCreate) SetCreatedAt(t time.Time) *TaskCreate {
+	tc.mutation.SetCreatedAt(t)
+	return tc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableCreatedAt(t *time.Time) *TaskCreate {
+	if t != nil {
+		tc.SetCreatedAt(*t)
+	}
+	return tc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (tc *TaskCreate) SetUpdatedAt(t time.Time) *TaskCreate {
+	tc.mutation.SetUpdatedAt(t)
+	return tc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (tc *TaskCreate) SetNillableUpdatedAt(t *time.Time) *TaskCreate {
+	if t != nil {
+		tc.SetUpdatedAt(*t)
+	}
+	return tc
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -29,6 +143,7 @@ func (tc *TaskCreate) Save(ctx context.Context) (*Task, error) {
 		err  error
 		node *Task
 	)
+	tc.defaults()
 	if len(tc.hooks) == 0 {
 		if err = tc.check(); err != nil {
 			return nil, err
@@ -92,8 +207,78 @@ func (tc *TaskCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (tc *TaskCreate) defaults() {
+	if _, ok := tc.mutation.Title(); !ok {
+		v := task.DefaultTitle
+		tc.mutation.SetTitle(v)
+	}
+	if _, ok := tc.mutation.Description(); !ok {
+		v := task.DefaultDescription
+		tc.mutation.SetDescription(v)
+	}
+	if _, ok := tc.mutation.EmployeeID(); !ok {
+		v := task.DefaultEmployeeID
+		tc.mutation.SetEmployeeID(v)
+	}
+	if _, ok := tc.mutation.HospitalID(); !ok {
+		v := task.DefaultHospitalID
+		tc.mutation.SetHospitalID(v)
+	}
+	if _, ok := tc.mutation.Status(); !ok {
+		v := task.DefaultStatus
+		tc.mutation.SetStatus(v)
+	}
+	if _, ok := tc.mutation.Priority(); !ok {
+		v := task.DefaultPriority
+		tc.mutation.SetPriority(v)
+	}
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		v := task.DefaultCreatedAt
+		tc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		v := task.DefaultUpdatedAt
+		tc.mutation.SetUpdatedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (tc *TaskCreate) check() error {
+	if _, ok := tc.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Task.title"`)}
+	}
+	if v, ok := tc.mutation.Title(); ok {
+		if err := task.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Task.title": %w`, err)}
+		}
+	}
+	if _, ok := tc.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "Task.description"`)}
+	}
+	if v, ok := tc.mutation.Description(); ok {
+		if err := task.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Task.description": %w`, err)}
+		}
+	}
+	if _, ok := tc.mutation.EmployeeID(); !ok {
+		return &ValidationError{Name: "employee_id", err: errors.New(`ent: missing required field "Task.employee_id"`)}
+	}
+	if _, ok := tc.mutation.HospitalID(); !ok {
+		return &ValidationError{Name: "hospital_id", err: errors.New(`ent: missing required field "Task.hospital_id"`)}
+	}
+	if _, ok := tc.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "Task.status"`)}
+	}
+	if _, ok := tc.mutation.Priority(); !ok {
+		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "Task.priority"`)}
+	}
+	if _, ok := tc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Task.created_at"`)}
+	}
+	if _, ok := tc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Task.updated_at"`)}
+	}
 	return nil
 }
 
@@ -121,6 +306,70 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	if value, ok := tc.mutation.Title(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldTitle,
+		})
+		_node.Title = value
+	}
+	if value, ok := tc.mutation.Description(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: task.FieldDescription,
+		})
+		_node.Description = value
+	}
+	if value, ok := tc.mutation.EmployeeID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldEmployeeID,
+		})
+		_node.EmployeeID = value
+	}
+	if value, ok := tc.mutation.HospitalID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: task.FieldHospitalID,
+		})
+		_node.HospitalID = value
+	}
+	if value, ok := tc.mutation.Status(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldStatus,
+		})
+		_node.Status = value
+	}
+	if value, ok := tc.mutation.Priority(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt8,
+			Value:  value,
+			Column: task.FieldPriority,
+		})
+		_node.Priority = value
+	}
+	if value, ok := tc.mutation.CreatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldCreatedAt,
+		})
+		_node.CreatedAt = value
+	}
+	if value, ok := tc.mutation.UpdatedAt(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: task.FieldUpdatedAt,
+		})
+		_node.UpdatedAt = value
+	}
 	return _node, _spec
 }
 
@@ -138,6 +387,7 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 	for i := range tcb.builders {
 		func(i int, root context.Context) {
 			builder := tcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TaskMutation)
 				if !ok {

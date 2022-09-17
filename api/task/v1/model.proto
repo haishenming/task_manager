@@ -44,7 +44,7 @@ message TaskDetail {
   // 任务状态
   TaskStatus status = 5;
   // 所有者员工ID
-  uint32 owner_id = 6;
+  uint32 employee_id = 6;
   // 所属医院ID
   uint32 hospital_id = 7;
   // 任务创建时间

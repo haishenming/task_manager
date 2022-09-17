@@ -249,6 +249,18 @@ func (hq *HospitalQuery) Clone() *HospitalQuery {
 
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Hospital.Query().
+//		GroupBy(hospital.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (hq *HospitalQuery) GroupBy(field string, fields ...string) *HospitalGroupBy {
 	grbuild := &HospitalGroupBy{config: hq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -265,6 +277,16 @@ func (hq *HospitalQuery) GroupBy(field string, fields ...string) *HospitalGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Hospital.Query().
+//		Select(hospital.FieldName).
+//		Scan(ctx, &v)
 func (hq *HospitalQuery) Select(fields ...string) *HospitalSelect {
 	hq.fields = append(hq.fields, fields...)
 	selbuild := &HospitalSelect{HospitalQuery: hq}
