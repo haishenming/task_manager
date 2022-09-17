@@ -14,7 +14,7 @@ enum TaskPriority {
   // 低优先级
   TASK_PRIORITY_LOW = 1;
   // 高优先级
-  TASK_PRIORITY_HiGH = 2;
+  TASK_PRIORITY_HIGH = 2;
   // 紧急
   TASK_PRIORITY_URGENT = 3;
 }

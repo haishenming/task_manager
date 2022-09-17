@@ -489,11 +489,11 @@
       "enum": [
         "TASK_PRIORITY_UNKNOWN",
         "TASK_PRIORITY_LOW",
-        "TASK_PRIORITY_HiGH",
+        "TASK_PRIORITY_HIGH",
         "TASK_PRIORITY_URGENT"
       ],
       "default": "TASK_PRIORITY_UNKNOWN",
-      "description": "- TASK_PRIORITY_UNKNOWN: 未知\n - TASK_PRIORITY_LOW: 低优先级\n - TASK_PRIORITY_HiGH: 高优先级\n - TASK_PRIORITY_URGENT: 紧急",
+      "description": "- TASK_PRIORITY_UNKNOWN: 未知\n - TASK_PRIORITY_LOW: 低优先级\n - TASK_PRIORITY_HIGH: 高优先级\n - TASK_PRIORITY_URGENT: 紧急",
       "title": "任务优先级"
     },
     "v1TaskStatus": {

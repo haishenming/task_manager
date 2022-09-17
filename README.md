@@ -12,6 +12,9 @@ docker-compose up -d
 
 ## 接口文档
 [apifox](https://www.apifox.cn/apidoc/shared-b25823ed-651f-48bf-8edb-e23095887149)
+或
+[swagger](http://127.0.0.1:8000/q/swagger-ui)
+
 
 ## 项目结构
 ```bash
@@ -38,7 +41,7 @@ docker-compose up -d
 │   ├── data           # 数据访问层
 │   ├── server         # 服务启动
 │   └── service        # 服务实现
-├── task                     # openapi文档
+├── task                     # swagger文档
 │   └── v1
 └── third_party              # 第三方库
     ├── errors
