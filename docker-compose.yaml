@@ -12,6 +12,8 @@ services:
       - mysql
     links:
       - mysql:mysql
+    environment:
+      TASK_MANAGER_data.database.source: root:rZhUHJLYtW@tcp(mysql:3306)/task?parseTime=true
   mysql:
     restart: always
     image: mysql
