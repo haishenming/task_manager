@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/task": {
+    "/v1/task": {
       "post": {
         "summary": "创建任务",
         "operationId": "Task_CreateTask",
@@ -80,7 +80,7 @@
         ]
       }
     },
-    "/task/assign": {
+    "/v1/task/assign": {
       "put": {
         "summary": "分配任务",
         "operationId": "Task_AssignTask",
@@ -113,7 +113,7 @@
         ]
       }
     },
-    "/task/hospital": {
+    "/v1/task/hospital": {
       "post": {
         "summary": "新建医院",
         "operationId": "Task_CreateHospital",
@@ -146,7 +146,7 @@
         ]
       }
     },
-    "/task/hospital/{hospital_id}": {
+    "/v1/task/hospital/{hospital_id}": {
       "get": {
         "summary": "获取医院的任务列表",
         "operationId": "Task_GetHospitalTasks",
@@ -195,7 +195,7 @@
         ]
       }
     },
-    "/task/staff": {
+    "/v1/task/staff": {
       "post": {
         "summary": "注册员工",
         "operationId": "Task_RegisterEmployee",
@@ -228,7 +228,7 @@
         ]
       }
     },
-    "/task/staff/{employee_id}": {
+    "/v1/task/staff/{employee_id}": {
       "get": {
         "summary": "获取员工的任务列表",
         "operationId": "Task_GetEmployeeTasks",

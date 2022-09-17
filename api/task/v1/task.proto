@@ -15,48 +15,48 @@ service Task {
   // 新建医院
   rpc CreateHospital (CreateHospitalRequest) returns (CreateHospitalReply) {
     option (google.api.http) = {
-      post: "/task/hospital"
+      post: "/v1/task/hospital"
       body: "*"
     };
   };
   // 注册员工
   rpc RegisterEmployee (RegisterEmployeeRequest) returns (RegisterEmployeeReply) {
     option (google.api.http) = {
-      post: "/task/staff"
+      post: "/v1/task/staff"
       body: "*"
     };
   };
   // 创建任务
   rpc CreateTask (CreateTaskRequest) returns (CreateTaskReply) {
     option (google.api.http) = {
-      post: "/task"
+      post: "/v1/task"
       body: "*"
     };
   };
   // 更新任务
   rpc UpdateTask (UpdateTaskRequest) returns (UpdateTaskReply) {
     option (google.api.http) = {
-      put: "/task"
+      put: "/v1/task"
       body: "*"
     };
   };
   // 分配任务
   rpc AssignTask (AssignTaskRequest) returns (AssignTaskReply) {
     option (google.api.http) = {
-      put: "/task/assign"
+      put: "/v1/task/assign"
       body: "*"
     };
   };
   // 获取员工的任务列表
   rpc GetEmployeeTasks (GetEmployeeTasksRequest) returns (GetEmployeeTasksReply) {
     option (google.api.http) = {
-      get: "/task/staff/{employee_id}"
+      get: "/v1/task/staff/{employee_id}"
     };
   };
   // 获取医院的任务列表
   rpc GetHospitalTasks (GetHospitalTasksRequest) returns (GetHospitalTasksReply) {
     option (google.api.http) = {
-      get: "/task/hospital/{hospital_id}"
+      get: "/v1/task/hospital/{hospital_id}"
     };
   };
 }

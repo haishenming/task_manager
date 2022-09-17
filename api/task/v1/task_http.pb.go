@@ -39,13 +39,13 @@ type TaskHTTPServer interface {
 
 func RegisterTaskHTTPServer(s *http.Server, srv TaskHTTPServer) {
 	r := s.Route("/")
-	r.POST("/task/hospital", _Task_CreateHospital0_HTTP_Handler(srv))
-	r.POST("/task/staff", _Task_RegisterEmployee0_HTTP_Handler(srv))
-	r.POST("/task", _Task_CreateTask0_HTTP_Handler(srv))
-	r.PUT("/task", _Task_UpdateTask0_HTTP_Handler(srv))
-	r.PUT("/task/assign", _Task_AssignTask0_HTTP_Handler(srv))
-	r.GET("/task/staff/{employee_id}", _Task_GetEmployeeTasks0_HTTP_Handler(srv))
-	r.GET("/task/hospital/{hospital_id}", _Task_GetHospitalTasks0_HTTP_Handler(srv))
+	r.POST("/v1/task/hospital", _Task_CreateHospital0_HTTP_Handler(srv))
+	r.POST("/v1/task/staff", _Task_RegisterEmployee0_HTTP_Handler(srv))
+	r.POST("/v1/task", _Task_CreateTask0_HTTP_Handler(srv))
+	r.PUT("/v1/task", _Task_UpdateTask0_HTTP_Handler(srv))
+	r.PUT("/v1/task/assign", _Task_AssignTask0_HTTP_Handler(srv))
+	r.GET("/v1/task/staff/{employee_id}", _Task_GetEmployeeTasks0_HTTP_Handler(srv))
+	r.GET("/v1/task/hospital/{hospital_id}", _Task_GetHospitalTasks0_HTTP_Handler(srv))
 }
 
 func _Task_CreateHospital0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
@@ -207,7 +207,7 @@ func NewTaskHTTPClient(client *http.Client) TaskHTTPClient {
 
 func (c *TaskHTTPClientImpl) AssignTask(ctx context.Context, in *AssignTaskRequest, opts ...http.CallOption) (*AssignTaskReply, error) {
 	var out AssignTaskReply
-	pattern := "/task/assign"
+	pattern := "/v1/task/assign"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTaskAssignTask))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -220,7 +220,7 @@ func (c *TaskHTTPClientImpl) AssignTask(ctx context.Context, in *AssignTaskReque
 
 func (c *TaskHTTPClientImpl) CreateHospital(ctx context.Context, in *CreateHospitalRequest, opts ...http.CallOption) (*CreateHospitalReply, error) {
 	var out CreateHospitalReply
-	pattern := "/task/hospital"
+	pattern := "/v1/task/hospital"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTaskCreateHospital))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -233,7 +233,7 @@ func (c *TaskHTTPClientImpl) CreateHospital(ctx context.Context, in *CreateHospi
 
 func (c *TaskHTTPClientImpl) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...http.CallOption) (*CreateTaskReply, error) {
 	var out CreateTaskReply
-	pattern := "/task"
+	pattern := "/v1/task"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTaskCreateTask))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -246,7 +246,7 @@ func (c *TaskHTTPClientImpl) CreateTask(ctx context.Context, in *CreateTaskReque
 
 func (c *TaskHTTPClientImpl) GetEmployeeTasks(ctx context.Context, in *GetEmployeeTasksRequest, opts ...http.CallOption) (*GetEmployeeTasksReply, error) {
 	var out GetEmployeeTasksReply
-	pattern := "/task/staff/{employee_id}"
+	pattern := "/v1/task/staff/{employee_id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationTaskGetEmployeeTasks))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -259,7 +259,7 @@ func (c *TaskHTTPClientImpl) GetEmployeeTasks(ctx context.Context, in *GetEmploy
 
 func (c *TaskHTTPClientImpl) GetHospitalTasks(ctx context.Context, in *GetHospitalTasksRequest, opts ...http.CallOption) (*GetHospitalTasksReply, error) {
 	var out GetHospitalTasksReply
-	pattern := "/task/hospital/{hospital_id}"
+	pattern := "/v1/task/hospital/{hospital_id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationTaskGetHospitalTasks))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -272,7 +272,7 @@ func (c *TaskHTTPClientImpl) GetHospitalTasks(ctx context.Context, in *GetHospit
 
 func (c *TaskHTTPClientImpl) RegisterEmployee(ctx context.Context, in *RegisterEmployeeRequest, opts ...http.CallOption) (*RegisterEmployeeReply, error) {
 	var out RegisterEmployeeReply
-	pattern := "/task/staff"
+	pattern := "/v1/task/staff"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTaskRegisterEmployee))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -285,7 +285,7 @@ func (c *TaskHTTPClientImpl) RegisterEmployee(ctx context.Context, in *RegisterE
 
 func (c *TaskHTTPClientImpl) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...http.CallOption) (*UpdateTaskReply, error) {
 	var out UpdateTaskReply
-	pattern := "/task"
+	pattern := "/v1/task"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationTaskUpdateTask))
 	opts = append(opts, http.PathTemplate(pattern))
