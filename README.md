@@ -3,6 +3,7 @@
 
 ## 技术选型
 服务框架：kratos
+
 数据库：mysql
 
 ## quick start
