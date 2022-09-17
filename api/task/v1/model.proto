@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package task.v1;
+
+option go_package = "task_manager/api/task/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.task.v1";
+option java_outer_classname = "TaskProtoV1";
+
+// 任务优先级
+enum TaskPriority {
+  // 未知
+  TASK_PRIORITY_UNKNOWN = 0;
+  // 低优先级
+  TASK_PRIORITY_LOW = 1;
+  // 高优先级
+  TASK_PRIORITY_HiGH = 2;
+  // 紧急
+  TASK_PRIORITY_URGENT = 3;
+}
+
+// 任务状态
+enum TaskStatus {
+  // 未知
+  TASK_STATUS_UNKNOWN = 0;
+  // open 需要员工采取行动
+  TASK_STATUS_OPEN = 1;
+  // failed 任务无法完成
+  TASK_STATUS_FAILED = 2;
+  // completed 任务成功
+  TASK_STATUS_COMPLETED = 3;
+}
+
+// 任务
+message TaskDetail {
+  // 任务ID
+  uint32 id = 1;
+  // 任务标题
+  string title = 2;
+  // 任务描述
+  string description = 3;
+  // 任务优先级
+  TaskPriority priority = 4;
+  // 任务状态
+  TaskStatus status = 5;
+  // 所有者员工ID
+  uint32 owner_id = 6;
+  // 所属医院ID
+  uint32 hospital_id = 7;
+  // 任务创建时间
+  int64 created_at = 8;
+  // 任务更新时间
+  int64 updated_at = 9;
+}

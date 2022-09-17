@@ -1,0 +1,530 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "task/v1/task.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Task"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/task": {
+      "post": {
+        "summary": "创建任务",
+        "operationId": "Task_CreateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateTaskReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      },
+      "put": {
+        "summary": "更新任务",
+        "operationId": "Task_UpdateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateTaskReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/task/assign": {
+      "put": {
+        "summary": "分配任务",
+        "operationId": "Task_AssignTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AssignTaskReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AssignTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/task/hospital": {
+      "post": {
+        "summary": "新建医院",
+        "operationId": "Task_CreateHospital",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateHospitalReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateHospitalRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/task/hospital/{hospital_id}": {
+      "get": {
+        "summary": "获取医院的任务列表",
+        "operationId": "Task_GetHospitalTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetHospitalTasksReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hospital_id",
+            "description": "医院ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "description": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "description": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/task/staff": {
+      "post": {
+        "summary": "注册员工",
+        "operationId": "Task_RegisterEmployee",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterEmployeeReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterEmployeeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    },
+    "/task/staff/{staff_id}": {
+      "get": {
+        "summary": "获取员工的任务列表",
+        "operationId": "Task_GetEmployeeTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetEmployeeTasksReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "staff_id",
+            "description": "员工ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "description": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "description": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Task"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AssignTaskReply": {
+      "type": "object"
+    },
+    "v1AssignTaskRequest": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "任务ID"
+        },
+        "staff_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "员工ID"
+        }
+      }
+    },
+    "v1CreateHospitalReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        }
+      }
+    },
+    "v1CreateHospitalRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "医院名称"
+        },
+        "address": {
+          "type": "string",
+          "title": "医院地址"
+        }
+      }
+    },
+    "v1CreateTaskReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        }
+      }
+    },
+    "v1CreateTaskRequest": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "任务标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "任务描述"
+        },
+        "priority": {
+          "$ref": "#/definitions/v1TaskPriority",
+          "title": "任务优先级"
+        },
+        "hospital_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "所属医院"
+        }
+      }
+    },
+    "v1GetEmployeeTasksReply": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1TaskDetail"
+          },
+          "title": "任务列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      }
+    },
+    "v1GetHospitalTasksReply": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1TaskDetail"
+          },
+          "title": "任务列表"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64",
+          "title": "总数"
+        }
+      }
+    },
+    "v1RegisterEmployeeReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        }
+      }
+    },
+    "v1RegisterEmployeeRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "员工名称"
+        },
+        "hospital_id": {
+          "type": "string",
+          "title": "医院"
+        }
+      }
+    },
+    "v1TaskDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "任务ID"
+        },
+        "title": {
+          "type": "string",
+          "title": "任务标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "任务描述"
+        },
+        "priority": {
+          "$ref": "#/definitions/v1TaskPriority",
+          "title": "任务优先级"
+        },
+        "status": {
+          "$ref": "#/definitions/v1TaskStatus",
+          "title": "任务状态"
+        },
+        "owner_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "所有者员工ID"
+        },
+        "hospital_id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "所属医院ID"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "int64",
+          "title": "任务创建时间"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "int64",
+          "title": "任务更新时间"
+        }
+      },
+      "title": "任务"
+    },
+    "v1TaskPriority": {
+      "type": "string",
+      "enum": [
+        "TASK_PRIORITY_UNKNOWN",
+        "TASK_PRIORITY_LOW",
+        "TASK_PRIORITY_HiGH",
+        "TASK_PRIORITY_URGENT"
+      ],
+      "default": "TASK_PRIORITY_UNKNOWN",
+      "description": "- TASK_PRIORITY_UNKNOWN: 未知\n - TASK_PRIORITY_LOW: 低优先级\n - TASK_PRIORITY_HiGH: 高优先级\n - TASK_PRIORITY_URGENT: 紧急",
+      "title": "任务优先级"
+    },
+    "v1TaskStatus": {
+      "type": "string",
+      "enum": [
+        "TASK_STATUS_UNKNOWN",
+        "TASK_STATUS_OPEN",
+        "TASK_STATUS_FAILED",
+        "TASK_STATUS_COMPLETED"
+      ],
+      "default": "TASK_STATUS_UNKNOWN",
+      "description": "- TASK_STATUS_UNKNOWN: 未知\n - TASK_STATUS_OPEN: open 需要员工采取行动\n - TASK_STATUS_FAILED: failed 任务无法完成\n - TASK_STATUS_COMPLETED: completed 任务成功",
+      "title": "任务状态"
+    },
+    "v1UpdateTaskReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "title": "ID"
+        }
+      }
+    },
+    "v1UpdateTaskRequest": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/v1TaskDetail",
+          "title": "任务"
+        }
+      }
+    }
+  }
+}
