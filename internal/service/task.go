@@ -19,6 +19,7 @@ func NewTaskService(uc *biz.TaskUsecase) *TaskService {
 	}
 }
 
+// CreateHospital creates a hospital
 func (s *TaskService) CreateHospital(ctx context.Context, req *pb.CreateHospitalRequest) (*pb.CreateHospitalReply, error) {
 	hospitalModel := biz.Hospital{
 		Name:    req.Name,
@@ -34,6 +35,8 @@ func (s *TaskService) CreateHospital(ctx context.Context, req *pb.CreateHospital
 		Id: uint32(hospital.ID),
 	}, nil
 }
+
+// RegisterEmployee registers an employee
 func (s *TaskService) RegisterEmployee(ctx context.Context, req *pb.RegisterEmployeeRequest) (*pb.RegisterEmployeeReply, error) {
 	employeeModel := biz.Employee{
 		Name:       req.Name,
@@ -49,6 +52,8 @@ func (s *TaskService) RegisterEmployee(ctx context.Context, req *pb.RegisterEmpl
 		Id: uint32(employee.ID),
 	}, nil
 }
+
+// CreateTask creates a task
 func (s *TaskService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest) (*pb.CreateTaskReply, error) {
 	taskModel := biz.Task{
 		Title:       req.Title,
@@ -66,6 +71,8 @@ func (s *TaskService) CreateTask(ctx context.Context, req *pb.CreateTaskRequest)
 		Id: uint32(task.ID),
 	}, nil
 }
+
+// UpdateTask updates a task
 func (s *TaskService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest) (*pb.UpdateTaskReply, error) {
 	taskModel := biz.Task{
 		ID:          int(req.Id),
@@ -94,6 +101,8 @@ func (s *TaskService) UpdateTask(ctx context.Context, req *pb.UpdateTaskRequest)
 		},
 	}, nil
 }
+
+// AssignTask assigns a task to an employee
 func (s *TaskService) AssignTask(ctx context.Context, req *pb.AssignTaskRequest) (*pb.AssignTaskReply, error) {
 	err := s.uc.AssignTask(ctx, int(req.TaskId), int(req.EmployeeId))
 	if err != nil {
@@ -101,6 +110,8 @@ func (s *TaskService) AssignTask(ctx context.Context, req *pb.AssignTaskRequest)
 	}
 	return &pb.AssignTaskReply{}, nil
 }
+
+// GetEmployeeTasks returns all tasks of an employee
 func (s *TaskService) GetEmployeeTasks(ctx context.Context, req *pb.GetEmployeeTasksRequest) (*pb.GetEmployeeTasksReply, error) {
 	tasks, count, err := s.uc.ListByEmployeeID(ctx, int(req.EmployeeId), int(req.Limit), int(req.Offset))
 	if err != nil {
@@ -127,6 +138,8 @@ func (s *TaskService) GetEmployeeTasks(ctx context.Context, req *pb.GetEmployeeT
 		Count: uint32(count),
 	}, nil
 }
+
+// GetHospitalTasks returns all tasks of a hospital
 func (s *TaskService) GetHospitalTasks(ctx context.Context, req *pb.GetHospitalTasksRequest) (*pb.GetHospitalTasksReply, error) {
 	tasks, count, err := s.uc.ListByEmployeeID(ctx, int(req.HospitalId), int(req.Limit), int(req.Offset))
 	if err != nil {
@@ -151,5 +164,52 @@ func (s *TaskService) GetHospitalTasks(ctx context.Context, req *pb.GetHospitalT
 	return &pb.GetHospitalTasksReply{
 		Tasks: taskDetails,
 		Count: uint32(count),
+	}, nil
+}
+
+// GetHospitals returns all hospitals
+func (s *TaskService) GetHospitals(ctx context.Context, request *pb.GetHospitalsRequest) (*pb.GetHospitalsReply, error) {
+	hospitals, count, err := s.uc.GetHospitals(ctx, int(request.Limit), int(request.Offset))
+	if err != nil {
+		return nil, err
+	}
+
+	var hospitalDetails []*pb.HospitalDetail
+	for _, hospital := range hospitals {
+		hospitalDetails = append(hospitalDetails, &pb.HospitalDetail{
+			Id:      uint32(hospital.ID),
+			Name:    hospital.Name,
+			Address: hospital.Address,
+		})
+	}
+
+	return &pb.GetHospitalsReply{
+		Hospitals: hospitalDetails,
+		Count:     uint32(count),
+	}, nil
+}
+
+// GetEmployees returns all employees
+func (s *TaskService) GetEmployees(ctx context.Context, req *pb.GetEmployeesRequest) (*pb.GetEmployeesReply, error) {
+	employees, count, err := s.uc.GetEmployeesByHospital(ctx, int(req.HospitalId), int(req.Limit), int(req.Offset))
+
+	if err != nil {
+		return nil, err
+	}
+
+	var employeeDetails []*pb.EmployeeDetail
+	for _, employee := range employees {
+		employeeDetails = append(employeeDetails, &pb.EmployeeDetail{
+			Id:         uint32(employee.ID),
+			Name:       employee.Name,
+			HospitalId: uint32(employee.HospitalID),
+			CreatedAt:  employee.CreatedAt.Unix(),
+			UpdatedAt:  employee.UpdatedAt.Unix(),
+		})
+	}
+
+	return &pb.GetEmployeesReply{
+		Employees: employeeDetails,
+		Count:     uint32(count),
 	}, nil
 }

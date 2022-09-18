@@ -27,7 +27,7 @@ type Task struct {
 	UpdatedAt   time.Time       `json:"updated_at"`
 }
 
-// TaskRepo is a Greater repo.
+// TaskRepo is a Task repo.
 type TaskRepo interface {
 	Save(context.Context, *Task) (*Task, error)
 	Update(context.Context, *Task) (*Task, error)

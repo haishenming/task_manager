@@ -52,3 +52,30 @@ message TaskDetail {
   // 任务更新时间
   int64 updated_at = 9;
 }
+
+// 医院
+message HospitalDetail {
+  // 医院ID
+  uint32 id = 1;
+  // 医院名称
+  string name = 2;
+  // 医院地址
+  string address = 3;
+  // 医院创建时间
+  int64 created_at = 4;
+  // 医院更新时间
+  int64 updated_at = 5;
+}
+
+// 员工
+message EmployeeDetail {
+  uint32 id = 1;
+  // 员工姓名
+  string name = 2;
+  // 所属医院ID
+  uint32 hospital_id = 3;
+  // 创建时间
+  int64 created_at = 4;
+  // 更新时间
+  int64 updated_at = 5;
+}

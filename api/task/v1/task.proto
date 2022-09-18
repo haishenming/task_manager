@@ -59,6 +59,18 @@ service Task {
       get: "/v1/task/hospital/{hospital_id}"
     };
   };
+  // 获取医院列表
+  rpc GetHospitals (GetHospitalsRequest) returns (GetHospitalsReply) {
+    option (google.api.http) = {
+      get: "/v1/task/hospitals"
+    };
+  };
+  // 获取医院的员工列表
+  rpc GetEmployees (GetEmployeesRequest) returns (GetEmployeesReply) {
+    option (google.api.http) = {
+      get: "/v1/task/employees"
+    };
+  };
 }
 
 message CreateHospitalRequest {
@@ -157,6 +169,37 @@ message GetHospitalTasksRequest {
 message GetHospitalTasksReply {
   // 任务列表
   repeated TaskDetail tasks = 1;
+  // 总数
+  uint32 count = 2;
+}
+
+message GetHospitalsRequest {
+  // limit
+  uint32 limit = 1;
+  // offset
+  uint32 offset = 2;
+}
+
+message GetHospitalsReply {
+  // 医院列表
+  repeated HospitalDetail hospitals = 1;
+  // 总数
+  uint32 count = 2;
+}
+
+// 获取医院的员工列表
+message GetEmployeesRequest {
+  // 医院ID
+  uint32 hospital_id = 1;
+  // limit
+  uint32 limit = 2;
+  // offset
+  uint32 offset = 3;
+}
+
+message GetEmployeesReply {
+  // 员工列表
+  repeated EmployeeDetail employees = 1;
   // 总数
   uint32 count = 2;
 }

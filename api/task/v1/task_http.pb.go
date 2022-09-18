@@ -23,7 +23,9 @@ const OperationTaskAssignTask = "/task.v1.Task/AssignTask"
 const OperationTaskCreateHospital = "/task.v1.Task/CreateHospital"
 const OperationTaskCreateTask = "/task.v1.Task/CreateTask"
 const OperationTaskGetEmployeeTasks = "/task.v1.Task/GetEmployeeTasks"
+const OperationTaskGetEmployees = "/task.v1.Task/GetEmployees"
 const OperationTaskGetHospitalTasks = "/task.v1.Task/GetHospitalTasks"
+const OperationTaskGetHospitals = "/task.v1.Task/GetHospitals"
 const OperationTaskRegisterEmployee = "/task.v1.Task/RegisterEmployee"
 const OperationTaskUpdateTask = "/task.v1.Task/UpdateTask"
 
@@ -32,7 +34,9 @@ type TaskHTTPServer interface {
 	CreateHospital(context.Context, *CreateHospitalRequest) (*CreateHospitalReply, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskReply, error)
 	GetEmployeeTasks(context.Context, *GetEmployeeTasksRequest) (*GetEmployeeTasksReply, error)
+	GetEmployees(context.Context, *GetEmployeesRequest) (*GetEmployeesReply, error)
 	GetHospitalTasks(context.Context, *GetHospitalTasksRequest) (*GetHospitalTasksReply, error)
+	GetHospitals(context.Context, *GetHospitalsRequest) (*GetHospitalsReply, error)
 	RegisterEmployee(context.Context, *RegisterEmployeeRequest) (*RegisterEmployeeReply, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskReply, error)
 }
@@ -46,6 +50,8 @@ func RegisterTaskHTTPServer(s *http.Server, srv TaskHTTPServer) {
 	r.PUT("/v1/task/assign", _Task_AssignTask0_HTTP_Handler(srv))
 	r.GET("/v1/task/staff/{employee_id}", _Task_GetEmployeeTasks0_HTTP_Handler(srv))
 	r.GET("/v1/task/hospital/{hospital_id}", _Task_GetHospitalTasks0_HTTP_Handler(srv))
+	r.GET("/v1/task/hospitals", _Task_GetHospitals0_HTTP_Handler(srv))
+	r.GET("/v1/task/employees", _Task_GetEmployees0_HTTP_Handler(srv))
 }
 
 func _Task_CreateHospital0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
@@ -187,12 +193,52 @@ func _Task_GetHospitalTasks0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _Task_GetHospitals0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetHospitalsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTaskGetHospitals)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetHospitals(ctx, req.(*GetHospitalsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetHospitalsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Task_GetEmployees0_HTTP_Handler(srv TaskHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetEmployeesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationTaskGetEmployees)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetEmployees(ctx, req.(*GetEmployeesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetEmployeesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type TaskHTTPClient interface {
 	AssignTask(ctx context.Context, req *AssignTaskRequest, opts ...http.CallOption) (rsp *AssignTaskReply, err error)
 	CreateHospital(ctx context.Context, req *CreateHospitalRequest, opts ...http.CallOption) (rsp *CreateHospitalReply, err error)
 	CreateTask(ctx context.Context, req *CreateTaskRequest, opts ...http.CallOption) (rsp *CreateTaskReply, err error)
 	GetEmployeeTasks(ctx context.Context, req *GetEmployeeTasksRequest, opts ...http.CallOption) (rsp *GetEmployeeTasksReply, err error)
+	GetEmployees(ctx context.Context, req *GetEmployeesRequest, opts ...http.CallOption) (rsp *GetEmployeesReply, err error)
 	GetHospitalTasks(ctx context.Context, req *GetHospitalTasksRequest, opts ...http.CallOption) (rsp *GetHospitalTasksReply, err error)
+	GetHospitals(ctx context.Context, req *GetHospitalsRequest, opts ...http.CallOption) (rsp *GetHospitalsReply, err error)
 	RegisterEmployee(ctx context.Context, req *RegisterEmployeeRequest, opts ...http.CallOption) (rsp *RegisterEmployeeReply, err error)
 	UpdateTask(ctx context.Context, req *UpdateTaskRequest, opts ...http.CallOption) (rsp *UpdateTaskReply, err error)
 }
@@ -257,11 +303,37 @@ func (c *TaskHTTPClientImpl) GetEmployeeTasks(ctx context.Context, in *GetEmploy
 	return &out, err
 }
 
+func (c *TaskHTTPClientImpl) GetEmployees(ctx context.Context, in *GetEmployeesRequest, opts ...http.CallOption) (*GetEmployeesReply, error) {
+	var out GetEmployeesReply
+	pattern := "/v1/task/employees"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationTaskGetEmployees))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *TaskHTTPClientImpl) GetHospitalTasks(ctx context.Context, in *GetHospitalTasksRequest, opts ...http.CallOption) (*GetHospitalTasksReply, error) {
 	var out GetHospitalTasksReply
 	pattern := "/v1/task/hospital/{hospital_id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationTaskGetHospitalTasks))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *TaskHTTPClientImpl) GetHospitals(ctx context.Context, in *GetHospitalsRequest, opts ...http.CallOption) (*GetHospitalsReply, error) {
+	var out GetHospitalsReply
+	pattern := "/v1/task/hospitals"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationTaskGetHospitals))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

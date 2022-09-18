@@ -27,11 +27,16 @@ type HospitalRepo interface {
 	Save(context.Context, *Hospital) (*Hospital, error)
 	Update(context.Context, *Hospital) (*Hospital, error)
 	FindByID(context.Context, int) (*Hospital, error)
-	ListAll(context.Context) ([]*Hospital, error)
+	ListAll(ctx context.Context, limit, offset int) ([]*Hospital, int, error)
 }
 
 // CreateHospital creates a Hospital, and returns the new Hospital.
 func (uc *TaskUsecase) CreateHospital(ctx context.Context, g *Hospital) (*Hospital, error) {
 	uc.log.WithContext(ctx).Infof("CreateHospital: %v", g.Name)
 	return uc.hr.Save(ctx, g)
+}
+
+func (uc *TaskUsecase) GetHospitals(ctx context.Context, limit, offset int) ([]*Hospital, int, error) {
+	uc.log.WithContext(ctx).Infof("GetHospitals")
+	return uc.hr.ListAll(ctx, limit, offset)
 }

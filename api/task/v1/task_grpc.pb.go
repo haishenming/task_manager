@@ -36,6 +36,10 @@ type TaskClient interface {
 	GetEmployeeTasks(ctx context.Context, in *GetEmployeeTasksRequest, opts ...grpc.CallOption) (*GetEmployeeTasksReply, error)
 	// 获取医院的任务列表
 	GetHospitalTasks(ctx context.Context, in *GetHospitalTasksRequest, opts ...grpc.CallOption) (*GetHospitalTasksReply, error)
+	// 获取医院列表
+	GetHospitals(ctx context.Context, in *GetHospitalsRequest, opts ...grpc.CallOption) (*GetHospitalsReply, error)
+	// 获取医院的员工列表
+	GetEmployees(ctx context.Context, in *GetEmployeesRequest, opts ...grpc.CallOption) (*GetEmployeesReply, error)
 }
 
 type taskClient struct {
@@ -109,6 +113,24 @@ func (c *taskClient) GetHospitalTasks(ctx context.Context, in *GetHospitalTasksR
 	return out, nil
 }
 
+func (c *taskClient) GetHospitals(ctx context.Context, in *GetHospitalsRequest, opts ...grpc.CallOption) (*GetHospitalsReply, error) {
+	out := new(GetHospitalsReply)
+	err := c.cc.Invoke(ctx, "/task.v1.Task/GetHospitals", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskClient) GetEmployees(ctx context.Context, in *GetEmployeesRequest, opts ...grpc.CallOption) (*GetEmployeesReply, error) {
+	out := new(GetEmployeesReply)
+	err := c.cc.Invoke(ctx, "/task.v1.Task/GetEmployees", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServer is the server API for Task service.
 // All implementations must embed UnimplementedTaskServer
 // for forward compatibility
@@ -127,6 +149,10 @@ type TaskServer interface {
 	GetEmployeeTasks(context.Context, *GetEmployeeTasksRequest) (*GetEmployeeTasksReply, error)
 	// 获取医院的任务列表
 	GetHospitalTasks(context.Context, *GetHospitalTasksRequest) (*GetHospitalTasksReply, error)
+	// 获取医院列表
+	GetHospitals(context.Context, *GetHospitalsRequest) (*GetHospitalsReply, error)
+	// 获取医院的员工列表
+	GetEmployees(context.Context, *GetEmployeesRequest) (*GetEmployeesReply, error)
 	mustEmbedUnimplementedTaskServer()
 }
 
@@ -154,6 +180,12 @@ func (UnimplementedTaskServer) GetEmployeeTasks(context.Context, *GetEmployeeTas
 }
 func (UnimplementedTaskServer) GetHospitalTasks(context.Context, *GetHospitalTasksRequest) (*GetHospitalTasksReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHospitalTasks not implemented")
+}
+func (UnimplementedTaskServer) GetHospitals(context.Context, *GetHospitalsRequest) (*GetHospitalsReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetHospitals not implemented")
+}
+func (UnimplementedTaskServer) GetEmployees(context.Context, *GetEmployeesRequest) (*GetEmployeesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetEmployees not implemented")
 }
 func (UnimplementedTaskServer) mustEmbedUnimplementedTaskServer() {}
 
@@ -294,6 +326,42 @@ func _Task_GetHospitalTasks_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Task_GetHospitals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetHospitalsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServer).GetHospitals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/task.v1.Task/GetHospitals",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServer).GetHospitals(ctx, req.(*GetHospitalsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Task_GetEmployees_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEmployeesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServer).GetEmployees(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/task.v1.Task/GetEmployees",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServer).GetEmployees(ctx, req.(*GetEmployeesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Task_ServiceDesc is the grpc.ServiceDesc for Task service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -328,6 +396,14 @@ var Task_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetHospitalTasks",
 			Handler:    _Task_GetHospitalTasks_Handler,
+		},
+		{
+			MethodName: "GetHospitals",
+			Handler:    _Task_GetHospitals_Handler,
+		},
+		{
+			MethodName: "GetEmployees",
+			Handler:    _Task_GetEmployees_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

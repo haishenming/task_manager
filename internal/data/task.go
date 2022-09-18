@@ -111,7 +111,7 @@ func (r *taskRepo) ListAll(ctx context.Context, query *biz.TaskQuery, limit, off
 		return nil, 0, err
 	}
 
-	var res []*biz.Task
+	res := make([]*biz.Task, 0, len(tasks))
 	for _, t := range tasks {
 		res = append(res, &biz.Task{
 			ID:          t.ID,

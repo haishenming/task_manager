@@ -61,7 +61,31 @@ func (h hospitalRepo) FindByID(ctx context.Context, i int) (*biz.Hospital, error
 }
 
 // ListAll 列出所有医院
-func (h hospitalRepo) ListAll(ctx context.Context) ([]*biz.Hospital, error) {
-	// TODO implement me
-	panic("implement me")
+func (h hospitalRepo) ListAll(ctx context.Context, limit, offset int) ([]*biz.Hospital, int, error) {
+	var err error
+
+	q := h.data.Client().Hospital.Query()
+
+	hoss, err := q.Limit(limit).Offset(offset).All(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	count, err := q.Count(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	hospitals := make([]*biz.Hospital, 0, len(hoss))
+	for _, hos := range hoss {
+		hospitals = append(hospitals, &biz.Hospital{
+			ID:        hos.ID,
+			Name:      hos.Name,
+			Address:   hos.Address,
+			CreatedAt: hos.CreatedAt,
+			UpdatedAt: hos.UpdatedAt,
+		})
+	}
+
+	return hospitals, count, nil
 }

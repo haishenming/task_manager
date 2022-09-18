@@ -27,7 +27,7 @@ type EmployeeRepo interface {
 	Save(context.Context, *Employee) (*Employee, error)
 	Update(context.Context, *Employee) (*Employee, error)
 	FindByID(context.Context, int) (*Employee, error)
-	ListAll(context.Context) ([]*Employee, error)
+	ListAll(ctx context.Context, hospitalID, limit, offset int) ([]*Employee, int, error)
 }
 
 // CreateEmployee creates a Employee, and returns the new Employee.
@@ -41,4 +41,18 @@ func (uc *TaskUsecase) CreateEmployee(ctx context.Context, g *Employee) (*Employ
 	}
 
 	return uc.er.Save(ctx, g)
+}
+
+// GetEmployeesByHospital returns all employees by hospital id.
+func (uc *TaskUsecase) GetEmployeesByHospital(ctx context.Context, hospitalID, limit, offset int) ([]*Employee, int,
+	error) {
+	uc.log.WithContext(ctx).Infof("GetEmployeesByHospital: %v", hospitalID)
+
+	// 检查医院是否存在
+	if _, err := uc.hr.FindByID(ctx, hospitalID); err != nil {
+		uc.log.WithContext(ctx).Errorw("GetEmployeesByHospital: hospital not found", "hospital_id", hospitalID, "err", err)
+		return nil, 0, ErrHospitalNotFound
+	}
+
+	return uc.er.ListAll(ctx, hospitalID, limit, offset)
 }
