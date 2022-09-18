@@ -1,6 +1,8 @@
 # Task
 面向医院的任务管理服务
 
+## 缘由
+
 ## 技术选型
 ### 前提
 1. 全新的团队，没有技术债务
@@ -18,14 +20,18 @@
   结构化清晰，选用sql，几乎mysql就是唯一选择，就不详细对比了
 
 3. 考虑缓存
+  数据量不大，不考虑缓存
 
 4. 考虑高可用
+  仅供快速部署演示使用，仅考虑单节点部署
 
 ### 结论  
 
 服务框架：kratos
 
 数据库：mysql
+
+部署：docker-compose
 
 ## quick start
 ```bash
@@ -75,6 +81,9 @@ docker-compose up -d
     │   └── v3
     └── validate
 ```
+
+## 数据表设计
+
 
 ## 疑问
 - Return a list of tasks created under a particular company.

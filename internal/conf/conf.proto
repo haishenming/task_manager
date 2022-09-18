@@ -1,5 +1,5 @@
 syntax = "proto3";
-package kratos.api;
+package task.api;
 
 option go_package = "task_manager/internal/conf;conf";
 

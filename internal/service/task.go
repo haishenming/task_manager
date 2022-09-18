@@ -141,7 +141,7 @@ func (s *TaskService) GetEmployeeTasks(ctx context.Context, req *pb.GetEmployeeT
 
 // GetHospitalTasks returns all tasks of a hospital
 func (s *TaskService) GetHospitalTasks(ctx context.Context, req *pb.GetHospitalTasksRequest) (*pb.GetHospitalTasksReply, error) {
-	tasks, count, err := s.uc.ListByEmployeeID(ctx, int(req.HospitalId), int(req.Limit), int(req.Offset))
+	tasks, count, err := s.uc.ListByHospitalID(ctx, int(req.HospitalId), int(req.Limit), int(req.Offset))
 	if err != nil {
 		return nil, err
 	}
@@ -177,9 +177,11 @@ func (s *TaskService) GetHospitals(ctx context.Context, request *pb.GetHospitals
 	var hospitalDetails []*pb.HospitalDetail
 	for _, hospital := range hospitals {
 		hospitalDetails = append(hospitalDetails, &pb.HospitalDetail{
-			Id:      uint32(hospital.ID),
-			Name:    hospital.Name,
-			Address: hospital.Address,
+			Id:        uint32(hospital.ID),
+			Name:      hospital.Name,
+			Address:   hospital.Address,
+			CreatedAt: hospital.CreatedAt.Unix(),
+			UpdatedAt: hospital.UpdatedAt.Unix(),
 		})
 	}
 

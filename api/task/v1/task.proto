@@ -11,6 +11,7 @@ option java_package = "dev.kratos.api.task.v1";
 option java_outer_classname = "TaskProtoV1";
 
 // The task service definition.
+// Lagency SLO: 95th percentile latency < 100ms, 99th percentile latency < 200ms
 service Task {
   // 新建医院
   rpc CreateHospital (CreateHospitalRequest) returns (CreateHospitalReply) {
