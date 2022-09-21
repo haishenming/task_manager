@@ -12,5 +12,4 @@ enum ErrorReason {
   HOSPITAL_NOT_FOUND = 1;
   TASK_NOT_FOUND = 2;
   EMPLOYEE_NOT_FOUND = 3;
-
 }
