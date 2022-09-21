@@ -160,14 +160,6 @@ func (tu *TaskUpdate) SetUpdatedAt(t time.Time) *TaskUpdate {
 	return tu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableUpdatedAt(t *time.Time) *TaskUpdate {
-	if t != nil {
-		tu.SetUpdatedAt(*t)
-	}
-	return tu
-}
-
 // Mutation returns the TaskMutation object of the builder.
 func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
@@ -179,6 +171,7 @@ func (tu *TaskUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	tu.defaults()
 	if len(tu.hooks) == 0 {
 		if err = tu.check(); err != nil {
 			return 0, err
@@ -230,6 +223,14 @@ func (tu *TaskUpdate) Exec(ctx context.Context) error {
 func (tu *TaskUpdate) ExecX(ctx context.Context) {
 	if err := tu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tu *TaskUpdate) defaults() {
+	if _, ok := tu.mutation.UpdatedAt(); !ok {
+		v := task.UpdateDefaultUpdatedAt()
+		tu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -501,14 +502,6 @@ func (tuo *TaskUpdateOne) SetUpdatedAt(t time.Time) *TaskUpdateOne {
 	return tuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableUpdatedAt(t *time.Time) *TaskUpdateOne {
-	if t != nil {
-		tuo.SetUpdatedAt(*t)
-	}
-	return tuo
-}
-
 // Mutation returns the TaskMutation object of the builder.
 func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
@@ -527,6 +520,7 @@ func (tuo *TaskUpdateOne) Save(ctx context.Context) (*Task, error) {
 		err  error
 		node *Task
 	)
+	tuo.defaults()
 	if len(tuo.hooks) == 0 {
 		if err = tuo.check(); err != nil {
 			return nil, err
@@ -584,6 +578,14 @@ func (tuo *TaskUpdateOne) Exec(ctx context.Context) error {
 func (tuo *TaskUpdateOne) ExecX(ctx context.Context) {
 	if err := tuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (tuo *TaskUpdateOne) defaults() {
+	if _, ok := tuo.mutation.UpdatedAt(); !ok {
+		v := task.UpdateDefaultUpdatedAt()
+		tuo.mutation.SetUpdatedAt(v)
 	}
 }
 

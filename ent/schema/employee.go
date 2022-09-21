@@ -18,7 +18,7 @@ func (Employee) Fields() []ent.Field {
 		field.String("name").NotEmpty().Default("").Comment("员工名称"),
 		field.Int("hospital_id").Comment("医院id"),
 		field.Time("created_at").Default(time.Now()).Comment("创建时间"),
-		field.Time("updated_at").Default(time.Now()).Comment("更新时间"),
+		field.Time("updated_at").Default(time.Now()).UpdateDefault(time.Now).Comment("更新时间"),
 	}
 }
 

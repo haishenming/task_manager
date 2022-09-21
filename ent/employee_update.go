@@ -75,14 +75,6 @@ func (eu *EmployeeUpdate) SetUpdatedAt(t time.Time) *EmployeeUpdate {
 	return eu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (eu *EmployeeUpdate) SetNillableUpdatedAt(t *time.Time) *EmployeeUpdate {
-	if t != nil {
-		eu.SetUpdatedAt(*t)
-	}
-	return eu
-}
-
 // Mutation returns the EmployeeMutation object of the builder.
 func (eu *EmployeeUpdate) Mutation() *EmployeeMutation {
 	return eu.mutation
@@ -94,6 +86,7 @@ func (eu *EmployeeUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	eu.defaults()
 	if len(eu.hooks) == 0 {
 		if err = eu.check(); err != nil {
 			return 0, err
@@ -145,6 +138,14 @@ func (eu *EmployeeUpdate) Exec(ctx context.Context) error {
 func (eu *EmployeeUpdate) ExecX(ctx context.Context) {
 	if err := eu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (eu *EmployeeUpdate) defaults() {
+	if _, ok := eu.mutation.UpdatedAt(); !ok {
+		v := employee.UpdateDefaultUpdatedAt()
+		eu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -277,14 +278,6 @@ func (euo *EmployeeUpdateOne) SetUpdatedAt(t time.Time) *EmployeeUpdateOne {
 	return euo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (euo *EmployeeUpdateOne) SetNillableUpdatedAt(t *time.Time) *EmployeeUpdateOne {
-	if t != nil {
-		euo.SetUpdatedAt(*t)
-	}
-	return euo
-}
-
 // Mutation returns the EmployeeMutation object of the builder.
 func (euo *EmployeeUpdateOne) Mutation() *EmployeeMutation {
 	return euo.mutation
@@ -303,6 +296,7 @@ func (euo *EmployeeUpdateOne) Save(ctx context.Context) (*Employee, error) {
 		err  error
 		node *Employee
 	)
+	euo.defaults()
 	if len(euo.hooks) == 0 {
 		if err = euo.check(); err != nil {
 			return nil, err
@@ -360,6 +354,14 @@ func (euo *EmployeeUpdateOne) Exec(ctx context.Context) error {
 func (euo *EmployeeUpdateOne) ExecX(ctx context.Context) {
 	if err := euo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (euo *EmployeeUpdateOne) defaults() {
+	if _, ok := euo.mutation.UpdatedAt(); !ok {
+		v := employee.UpdateDefaultUpdatedAt()
+		euo.mutation.SetUpdatedAt(v)
 	}
 }
 

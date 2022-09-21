@@ -87,5 +87,15 @@ docker-compose up -d
 
 ## 疑问
 - Return a list of tasks created under a particular company.
-    - 这里的company指的是医院吗？全文没有其他地方提到company了，最贴切的解释就是医院。
+  - 这里的company指的是医院吗？全文没有其他地方提到company了，最贴切的解释就是医院。
+- 需求细节
+  - 员工角色的划分
+    - 管理者
+    - 执行者
+  - task的操作权限
+    - 什么人可以创建修改task
+    - 什么人可以修改task的状态
+    - task的优先级是否可以修改
+  - 后台管理系统
+    - 对医院的操作
 

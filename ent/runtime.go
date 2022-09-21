@@ -30,6 +30,8 @@ func init() {
 	employeeDescUpdatedAt := employeeFields[3].Descriptor()
 	// employee.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	employee.DefaultUpdatedAt = employeeDescUpdatedAt.Default.(time.Time)
+	// employee.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	employee.UpdateDefaultUpdatedAt = employeeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	hospitalFields := schema.Hospital{}.Fields()
 	_ = hospitalFields
 	// hospitalDescName is the schema descriptor for name field.
@@ -52,6 +54,8 @@ func init() {
 	hospitalDescUpdatedAt := hospitalFields[3].Descriptor()
 	// hospital.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	hospital.DefaultUpdatedAt = hospitalDescUpdatedAt.Default.(time.Time)
+	// hospital.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	hospital.UpdateDefaultUpdatedAt = hospitalDescUpdatedAt.UpdateDefault.(func() time.Time)
 	taskFields := schema.Task{}.Fields()
 	_ = taskFields
 	// taskDescTitle is the schema descriptor for title field.
@@ -90,4 +94,6 @@ func init() {
 	taskDescUpdatedAt := taskFields[7].Descriptor()
 	// task.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	task.DefaultUpdatedAt = taskDescUpdatedAt.Default.(time.Time)
+	// task.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	task.UpdateDefaultUpdatedAt = taskDescUpdatedAt.UpdateDefault.(func() time.Time)
 }

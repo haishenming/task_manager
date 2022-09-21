@@ -22,7 +22,7 @@ func (Task) Fields() []ent.Field {
 		field.Int8("status").Default(0).Comment("任务状态"),
 		field.Int8("priority").Default(0).Comment("任务优先级"),
 		field.Time("created_at").Default(time.Now()).Comment("创建时间"),
-		field.Time("updated_at").Default(time.Now()).Comment("更新时间"),
+		field.Time("updated_at").Default(time.Now()).UpdateDefault(time.Now).Comment("更新时间"),
 	}
 }
 

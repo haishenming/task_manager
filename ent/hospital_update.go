@@ -76,14 +76,6 @@ func (hu *HospitalUpdate) SetUpdatedAt(t time.Time) *HospitalUpdate {
 	return hu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (hu *HospitalUpdate) SetNillableUpdatedAt(t *time.Time) *HospitalUpdate {
-	if t != nil {
-		hu.SetUpdatedAt(*t)
-	}
-	return hu
-}
-
 // Mutation returns the HospitalMutation object of the builder.
 func (hu *HospitalUpdate) Mutation() *HospitalMutation {
 	return hu.mutation
@@ -95,6 +87,7 @@ func (hu *HospitalUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	hu.defaults()
 	if len(hu.hooks) == 0 {
 		if err = hu.check(); err != nil {
 			return 0, err
@@ -146,6 +139,14 @@ func (hu *HospitalUpdate) Exec(ctx context.Context) error {
 func (hu *HospitalUpdate) ExecX(ctx context.Context) {
 	if err := hu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (hu *HospitalUpdate) defaults() {
+	if _, ok := hu.mutation.UpdatedAt(); !ok {
+		v := hospital.UpdateDefaultUpdatedAt()
+		hu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -277,14 +278,6 @@ func (huo *HospitalUpdateOne) SetUpdatedAt(t time.Time) *HospitalUpdateOne {
 	return huo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (huo *HospitalUpdateOne) SetNillableUpdatedAt(t *time.Time) *HospitalUpdateOne {
-	if t != nil {
-		huo.SetUpdatedAt(*t)
-	}
-	return huo
-}
-
 // Mutation returns the HospitalMutation object of the builder.
 func (huo *HospitalUpdateOne) Mutation() *HospitalMutation {
 	return huo.mutation
@@ -303,6 +296,7 @@ func (huo *HospitalUpdateOne) Save(ctx context.Context) (*Hospital, error) {
 		err  error
 		node *Hospital
 	)
+	huo.defaults()
 	if len(huo.hooks) == 0 {
 		if err = huo.check(); err != nil {
 			return nil, err
@@ -360,6 +354,14 @@ func (huo *HospitalUpdateOne) Exec(ctx context.Context) error {
 func (huo *HospitalUpdateOne) ExecX(ctx context.Context) {
 	if err := huo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (huo *HospitalUpdateOne) defaults() {
+	if _, ok := huo.mutation.UpdatedAt(); !ok {
+		v := hospital.UpdateDefaultUpdatedAt()
+		huo.mutation.SetUpdatedAt(v)
 	}
 }
 

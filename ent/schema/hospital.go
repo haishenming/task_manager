@@ -18,7 +18,7 @@ func (Hospital) Fields() []ent.Field {
 		field.String("name").NotEmpty().Default("").Comment("医院名称"),
 		field.String("address").NotEmpty().Default("").Comment("医院地址"),
 		field.Time("created_at").Default(time.Now()).Comment("创建时间"),
-		field.Time("updated_at").Default(time.Now()).Comment("更新时间"),
+		field.Time("updated_at").Default(time.Now()).UpdateDefault(time.Now).Comment("更新时间"),
 	}
 }
 
